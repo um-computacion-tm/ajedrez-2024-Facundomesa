@@ -1,4 +1,4 @@
-from piece import Piece
+from game.piece import Piece
 
 class Pawn(Piece):
     def movements(self, row, col, board):
@@ -22,7 +22,7 @@ class Pawn(Piece):
 
 # rook
 
-from piece import Piece
+from game.piece import Piece
 
 class Rook(Piece):
     def movements(self, row, col, board):
@@ -46,7 +46,7 @@ class Rook(Piece):
 
 # knight
 
-from piece import Piece
+from game.piece import Piece
 
 class Knight(Piece):
     def movements(self, row, col, board):
@@ -63,7 +63,7 @@ class Knight(Piece):
 
 # bishop
 
-from piece import Piece
+from game.piece import Piece
 
 class Bishop(Piece):
     def movements(self, row, col, board):
@@ -81,7 +81,7 @@ class Bishop(Piece):
 
 # queen
 
-from piece import Piece
+from game.piece import Piece
 
 class Queen(Piece):
     def movements(self, row, col, board):
@@ -96,7 +96,7 @@ class Queen(Piece):
 
 # king
 
-from piece import Piece
+from game.piece import Piece
 
 class King(Piece):
     def movements(self, row, col, board):

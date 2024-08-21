@@ -1,4 +1,4 @@
-from chess import Chess
+from game.chess import Chess
 
 def main():
     chess = Chess()
