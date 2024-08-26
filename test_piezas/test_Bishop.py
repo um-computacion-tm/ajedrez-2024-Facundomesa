@@ -1,4 +1,5 @@
 import unittest
+from piezas import Bishop
 
 class TestBishop(unittest.TestCase):
     def test_bishop_initialization(self):

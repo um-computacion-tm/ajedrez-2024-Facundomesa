@@ -1,5 +1,3 @@
-# tests/test_pieces.py
-
 import unittest
 from piezas import Knight
 

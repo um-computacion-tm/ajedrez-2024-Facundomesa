@@ -1,4 +1,5 @@
 import unittest
+from piezas import Pawn
 
 class TestPawn(unittest.TestCase):
     def test_pawn_initialization(self):
