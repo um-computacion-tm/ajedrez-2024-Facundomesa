@@ -1,13 +1,13 @@
 from piezas import Knight
 
-class Piece:
+class piezas:
     def __init__(self, color):
         self.color = color
 
     def get_valid_moves(self, position, board):
         raise NotImplementedError("This method should be overridden by subclasses")
 
-class Knight(Piece):
+class Knight(piezas):
     def __init__(self, color):
         super().__init__(color)
 

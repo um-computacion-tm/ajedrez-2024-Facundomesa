@@ -1,4 +1,4 @@
-from piezas.rook import Rook
+from piezas.Rook import Rook
 
 
 class Board:

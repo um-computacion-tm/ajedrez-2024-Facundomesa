@@ -2,12 +2,12 @@ import unittest
 from piezas import Bishop
 
 class TestBishop(unittest.TestCase):
-    def test_bishop_initialization(self):
+    def test_Bishop_initialization(self):
         bishop = bishop("white")
         self.assertEqual(bishop.color, "white")
         self.assertEqual(str(bishop), "white Bishop")
 
-    def test_bishop_moves_from_center(self):
+    def test_Bishop_moves_from_center(self):
         bishop = bishop("white")
         board = [[None for _ in range(8)] for _ in range(8)]
         position = (4, 4)
@@ -19,7 +19,7 @@ class TestBishop(unittest.TestCase):
         ]
         self.assertCountEqual(bishop.get_valid_moves(position, board), expected_moves)
 
-    def test_bishop_moves_with_obstructions(self):
+    def test_Bishop_moves_with_obstructions(self):
         bishop = bishop("white")
         board = [[None for _ in range(8)] for _ in range(8)]
         board[2][2] = bishop("white")  # Obstrucción del mismo color
@@ -33,7 +33,7 @@ class TestBishop(unittest.TestCase):
         ]
         self.assertCountEqual(bishop.get_valid_moves(position, board), expected_moves)
 
-    def test_bishop_moves_from_corner(self):
+    def test_Bishop_moves_from_corner(self):
         bishop = bishop("black")
         board = [[None for _ in range(8)] for _ in range(8)]
         position = (0, 0)

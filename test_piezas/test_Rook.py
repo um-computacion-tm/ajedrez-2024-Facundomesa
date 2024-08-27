@@ -1,9 +1,10 @@
 import unittest
-from test_piezas.test_rook import Rook
+from piezas import Rook
+
 class TestRook(unittest.TestCase):
     def setUp(self):
-        self.white_rook = Rook("White")
-        self.black_rook = Rook("Black")
+        self.white_Rook = Rook("White")
+        self.black_Rook = Rook("Black")
 
     def test_color_validation(self):
         with self.assertRaises(ValueError):

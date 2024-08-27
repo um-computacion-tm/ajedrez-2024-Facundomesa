@@ -1,3 +1,5 @@
+from piezas import Queen
+
 class Queen:
     def __init__(self, color):
         self.color = color
