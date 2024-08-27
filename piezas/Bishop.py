@@ -1,6 +1,3 @@
-from piezas import Bishop
-
-
 
 class Bishop:
     def __init__(self, color):

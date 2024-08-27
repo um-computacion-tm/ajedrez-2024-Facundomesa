@@ -1,6 +1,6 @@
 import unittest
 from piezas.Rook import Rook
-from game.board import Board 
+from game.Board import Board 
 
 class TestBoard(unittest.TestCase):
     def setUp(self):

@@ -1,7 +1,7 @@
 from game.chess import Chess
 
 def main():
-    chess = Chess()  # Inicializa el tablero de ajedrez
+    chess = chess()  # Inicializa el tablero de ajedrez
     while True:
         play(chess)
 

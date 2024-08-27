@@ -1,5 +1,5 @@
 import unittest
-from piezas import Knight
+from piezas.Knight import Knight
 
 
 class TestKnight(unittest.TestCase):
