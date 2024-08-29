@@ -1,5 +1,4 @@
 
-
 class Rook:
     def __init__(self, color):
         if color not in ["White", "Black"]:
@@ -25,5 +24,28 @@ class Rook:
 
     def __repr__(self):
         return f"Rook({self.color})"
+    
+    def __str__(self):
+        return "♜" if self.color == "BLACK" else "♖"
 
+    def possible_positions_vd(self, row, col):
+        possibles = []
+        for i in range(row + 1, 8):
+            if self.board.is_empty(i, col):
+                possibles.append((i, col))
+            else:
+                if self.board.get_piece(i, col).color != self.color:
+                    possibles.append((i, col))
+                break
+        return possibles
 
+    def possible_positions_va(self, row, col):
+        possibles = []
+        for i in range(row - 1, -1, -1):
+            if self.board.is_empty(i, col):
+                possibles.append((i, col))
+            else:
+                if self.board.get_piece(i, col).color != self.color:
+                    possibles.append((i, col))
+                break
+        return possibles

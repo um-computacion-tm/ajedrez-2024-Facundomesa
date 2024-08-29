@@ -10,3 +10,15 @@ class Piece:
         """Verifica si el movimiento es válido, considerando el tablero."""
         return (0 <= row < 8) and (0 <= col < 8) and (board[row][col] is None or board[row][col].color != self.color)
 
+    def __init__(self, color, board):
+        self.color = color
+        self.board = board
+
+    def __str__(self):
+        raise NotImplementedError("This method should be overridden.")
+
+    def possible_positions_vd(self, row, col):
+        raise NotImplementedError("This method should be overridden.")
+
+    def possible_positions_va(self, row, col):
+        raise NotImplementedError("This method should be overridden.")
