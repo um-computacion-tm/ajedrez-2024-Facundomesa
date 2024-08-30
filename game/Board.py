@@ -16,3 +16,15 @@ class Board:
 
     def get_piece(self, row, col):
         return self.__positions__[row][col]
+    
+    def __init__(self):
+        self.grid = [[None for _ in range(8)] for _ in range(8)]
+
+    def is_empty(self, row, col):
+        return self.grid[row][col] is None
+
+    def get_piece(self, row, col):
+        return self.grid[row][col]
+
+    def set_piece(self, row, col, piece):
+        self.grid[row][col] = piece
