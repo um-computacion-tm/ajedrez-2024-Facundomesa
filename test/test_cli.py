@@ -1,64 +1,85 @@
 import unittest
 from unittest.mock import patch
 from game.chess import Chess
-from game.main import get_move_input, play
+from game.cli import play
 
-class TestChessMain(unittest.TestCase):
 
-    @patch('builtins.input', side_effect=['1', '0', '2', '0'])
-    def test_get_move_input_valid(self, mock_input):
-        """
-        Prueba que get_move_input devuelva correctamente las coordenadas.
-        """
-        from_row, from_col, to_row, to_col = get_move_input()
-        self.assertEqual((from_row, from_col, to_row, to_col), (1, 0, 2, 0))
-
-    @patch('builtins.input', side_effect=['a', '0', '2', '0'])
-    def test_get_move_input_invalid(self, mock_input):
-        """
-        Prueba que get_move_input lance un ValueError si la entrada no es numérica.
-        """
-        with self.assertRaises(ValueError):
-            get_move_input()
-
-    @patch('builtins.input', side_effect=['1', '0', '2', '0'])
+class TestCli(unittest.TestCase):
+    @patch(  # este patch controla lo que hace el input
+        'builtins.input',
+        side_effect=['1', '1', '2', '2'], # estos son los valores que simula lo que ingresaria el usuario
+    )
+    @patch('builtins.print') # este patch controla lo que hace el print
     @patch.object(Chess, 'move')
-    @patch.object(Chess, 'turn', new_callable=unittest.mock.PropertyMock, return_value='WHITE')
-    def test_play_valid_move(self, mock_turn, mock_move, mock_input):
-        """
-        Prueba que play ejecute correctamente un movimiento válido.
-        """
+    def test_happy_path(
+        self,
+        mock_chess_move,
+        mock_print,
+        mock_input,
+    ): #
         chess = Chess()
         play(chess)
-        mock_move.assert_called_once_with(1, 0, 2, 0)
+        self.assertEqual(mock_input.call_count, 4)
+        self.assertEqual(mock_print.call_count, 2)
+        self.assertEqual(mock_chess_move.call_count, 1)
 
-    @patch('builtins.input', side_effect=['1', '0', '2', '0'])
-    @patch.object(Chess, 'move', side_effect=ValueError("Movimiento no válido"))
-    @patch.object(Chess, 'turn', new_callable=unittest.mock.PropertyMock, return_value='WHITE')
-    def test_play_invalid_move(self, mock_turn, mock_move, mock_input):
-        """
-        Prueba que play maneje correctamente un movimiento no válido.
-        """
+    @patch(  # este patch controla lo que hace el input
+        'builtins.input',
+        side_effect=['hola', '1', '2', '2'], # estos son los valores que simula lo que ingresaria el usuario
+    )
+    @patch('builtins.print') # este patch controla lo que hace el print
+    @patch.object(Chess, 'move')
+    def test_not_happy_path(
+        self,
+        mock_chess_move,
+        mock_print,
+        mock_input,
+    ): #
         chess = Chess()
-        with patch('builtins.print') as mock_print:
-            play(chess)
-            mock_move.assert_called_once_with(1, 0, 2, 0)
-            mock_print.assert_called_with("Error: Movimiento no válido")
+        play(chess)
+        self.assertEqual(mock_input.call_count, 1)
+        self.assertEqual(mock_print.call_count, 3)
+        self.assertEqual(mock_chess_move.call_count, 0)
 
-    @patch('builtins.input', side_effect=['1', '0', '2', '0'])
-    @patch.object(Chess, 'move', side_effect=Exception("Error inesperado"))
-    @patch.object(Chess, 'turn', new_callable=unittest.mock.PropertyMock, return_value='WHITE')
-    def test_play_unexpected_error(self, mock_turn, mock_move, mock_input):
-        """
-        Prueba que play maneje correctamente un error inesperado.
-        """
+    @patch(  # este patch controla lo que hace el input
+        'builtins.input',
+        side_effect=['1', '1', '2', 'hola'], # estos son los valores que simula lo que ingresaria el usuario
+    )
+    @patch('builtins.print') # este patch controla lo que hace el print
+    @patch.object(Chess, 'move')
+    def test_more_not_happy_path(
+        self,
+        mock_chess_move,
+        mock_print,
+        mock_input,
+    ): #
         chess = Chess()
-        with patch('builtins.print') as mock_print:
-            play(chess)
-            mock_move.assert_called_once_with(1, 0, 2, 0)
-            mock_print.assert_called_with("Unexpected error: Error inesperado")
+        play(chess)
+        self.assertEqual(mock_input.call_count, 4)
+        self.assertEqual(mock_print.call_count, 3)
+        self.assertEqual(mock_chess_move.call_count, 0)
 
-if __name__ == '__main__':
-    unittest.main()
+    # @patch(  # este patch controla lo que hace el input
+    #     'builtins.input',
+    #     side_effect=['1', '1', '2', '1'], # estos son los valores que simula lo que ingresaria el usuario
+    # )
+    # @patch('builtins.print') # este patch controla lo que hace el print
+    # @patch.object(
+    #     Chess,
+    #     'move',
+    #     side_effect=InvalidMove(),
+    # )
+    # def test_invalid_move(
+    #     self,
+    #     mock_chess_move,
+    #     mock_print,
+    #     mock_input,
+    # ): #
+    #     chess = Chess()
+    #     play(chess)
+    #     self.assertEqual(mock_input.call_count, 4)
+    #     self.assertEqual(mock_print.call_count, 2)
+    #     self.assertEqual(mock_chess_move.call_count, 1)
+
 
 
