@@ -1,7 +1,7 @@
 import unittest
 from unittest.mock import patch
 from game.chess import Chess
-from game.main import play  
+from game.main import play
 
 class TestChessGame(unittest.TestCase):
 
@@ -11,8 +11,8 @@ class TestChessGame(unittest.TestCase):
         chess = Chess()
         play(chess)
         self.assertTrue(mock_print.called)
-        expected_message = "Turno actual:"
-        mock_print.assert_any_call(expected_message, chess.turn)
+        expected_message = f"Turno actual: {chess.turn}"
+        mock_print.assert_any_call(expected_message)
 
     @patch('builtins.input', side_effect=['0', '0', '2', '2'])
     @patch('builtins.print')

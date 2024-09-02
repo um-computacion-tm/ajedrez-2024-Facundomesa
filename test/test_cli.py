@@ -58,6 +58,12 @@ class TestCli(unittest.TestCase):
         self.assertEqual(mock_input.call_count, 4)
         self.assertEqual(mock_print.call_count, 3)
         self.assertEqual(mock_chess_move.call_count, 0)
+    
+    @patch('builtins.print')
+    def test_happy_path(self, mock_print):
+        mock_print.assert_called_with("Expected message")
+        self.assertEqual(mock_print.call_count, 2)
+
 
     # @patch(  # este patch controla lo que hace el input
     #     'builtins.input',
