@@ -1,51 +1,54 @@
-
 class Rook:
-    def __init__(self, color):
-        if color not in ["White", "Black"]:
-            raise ValueError("Color must be 'White' or 'Black'")
-        self.color = color
+    VALID_COLORS = {"WHITE", "BLACK"}
+
+    def __init__(self, color, board=None):
+        if color.upper() not in Rook.VALID_COLORS:
+            raise ValueError(f"Color inválido: {color}")
+        self.color = color.upper()
+        self.board = board
 
     def valid_moves(self, position):
         row, col = position
-        if not (0 <= row <= 7 and 0 <= col <= 7):
-            raise ValueError("Invalid position on the board")
-
+        if not (0 <= row < 8 and 0 <= col < 8):
+            raise ValueError("Posición fuera del tablero")
+        
         moves = []
-        # Horizontal and vertical moves
+
+        # Movimientos verticales y horizontales
         for i in range(8):
             if i != row:
-                moves.append((i, col))  # vertical moves
+                moves.append((i, col))  # Movimiento vertical
             if i != col:
-                moves.append((row, i))  # horizontal moves
+                moves.append((row, i))  # Movimiento horizontal
+
         return moves
 
-    def can_attack(self, target, current):
-        return target[0] == current[0] or target[1] == current[1]
+    def can_attack(self, from_pos, to_pos):
+        # Solo puede atacar en la misma fila o columna
+        return from_pos[0] == to_pos[0] or from_pos[1] == to_pos[1]
 
     def __repr__(self):
         return f"Rook({self.color})"
-    
+
     def __str__(self):
-        return "♜" if self.color == "BLACK" else "♖"
+        return "♖" if self.color == "WHITE" else "♜"
 
     def possible_positions_vd(self, row, col):
         possibles = []
-        for i in range(row + 1, 8):
-            if self.board.is_empty(i, col):
-                possibles.append((i, col))
-            else:
-                if self.board.get_piece(i, col).color != self.color:
-                    possibles.append((i, col))
+        for r in range(row + 1, 8):
+            if self.board.get_piece(r, col):
+                if self.board.get_piece(r, col).color != self.color:
+                    possibles.append((r, col))  # Puede capturar pieza enemiga
                 break
+            possibles.append((r, col))  # Casilla vacía
         return possibles
 
     def possible_positions_va(self, row, col):
         possibles = []
-        for i in range(row - 1, -1, -1):
-            if self.board.is_empty(i, col):
-                possibles.append((i, col))
-            else:
-                if self.board.get_piece(i, col).color != self.color:
-                    possibles.append((i, col))
+        for r in range(row - 1, -1, -1):
+            if self.board.get_piece(r, col):
+                if self.board.get_piece(r, col).color != self.color:
+                    possibles.append((r, col))  # Puede capturar pieza enemiga
                 break
+            possibles.append((r, col))  # Casilla vacía
         return possibles

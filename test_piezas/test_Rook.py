@@ -44,32 +44,22 @@ class TestRook(unittest.TestCase):
         self.assertEqual(repr(self.white_Rook), "Rook(White)")
         self.assertEqual(repr(self.black_Rook), "Rook(Black)")
 
-
     def test_str(self):
         board = Board()
         rook = Rook("WHITE", board)
-        self.assertEqual(
-            str(rook),
-            "♜",
-        )
+        self.assertEqual(str(rook), "♖")  # Torre blanca, ♖, negra sería ♜
 
     def test_move_vertical_desc(self):
         board = Board()
         rook = Rook("WHITE", board)
         possibles = rook.possible_positions_vd(4, 1)
-        self.assertEqual(
-            possibles,
-            [(5, 1), (6, 1), (7, 1)]
-        )
+        self.assertEqual(possibles, [(5, 1), (6, 1), (7, 1)])
 
     def test_move_vertical_asc(self):
         board = Board()
         rook = Rook("WHITE", board)
         possibles = rook.possible_positions_va(4, 1)
-        self.assertEqual(
-            possibles,
-            [(3, 1), (2, 1), (1, 1), (0, 1)]
-        )
+        self.assertEqual(possibles, [(3, 1), (2, 1), (1, 1), (0, 1)])
 
     def test_move_vertical_desc_with_own_piece(self):
         board = Board()
@@ -77,10 +67,7 @@ class TestRook(unittest.TestCase):
         rook = Rook("WHITE", board)
         board.set_piece(4, 1, rook)
         possibles = rook.possible_positions_vd(4, 1)
-        self.assertEqual(
-            possibles,
-            [(5, 1)]
-        )
+        self.assertEqual(possibles, [(5, 1)])  # La torre no puede saltar piezas propias
 
     def test_move_vertical_desc_with_not_own_piece(self):
         board = Board()
@@ -88,10 +75,8 @@ class TestRook(unittest.TestCase):
         rook = Rook("WHITE", board)
         board.set_piece(4, 1, rook)
         possibles = rook.possible_positions_vd(4, 1)
-        self.assertEqual(
-            possibles,
-            [(5, 1), (6, 1)]
-        )
+        self.assertEqual(possibles, [(5, 1), (6, 1)])  # Puede capturar piezas enemigas
         
 if __name__ == '__main__':
     unittest.main()
+
