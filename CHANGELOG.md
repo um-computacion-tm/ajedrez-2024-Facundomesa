@@ -40,3 +40,24 @@ Added excepcion and test excepcion
 Fix chess and test chess 
 Fix cli and test cli
 
+[0.0.9] 27-08-24
+
+Make changes and fix problems
+
+[0.0.10] 28-08-24
+
+Modified Rook and Test Rook
+
+[0.0.11] 29-08-24
+
+Modified Board
+
+[0.0.12] 31-08-24
+
+Modified Test cli
+
+[0.0.13] 
+
+Modified Piece and Test Piece
+
+

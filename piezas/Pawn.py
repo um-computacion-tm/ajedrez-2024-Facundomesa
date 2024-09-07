@@ -1,6 +1,20 @@
 from piezas import Pawn
 
 class Pawn:
+    VALID_COLORS = {"WHITE", "BLACK"}
+
+    def __init__(self, color, board=None):
+        if color.upper() not in Pawn.VALID_COLORS:
+            raise ValueError(f"Color inválido: {color}")
+        self.color = color.upper()
+        self.board = board
+
+    def __repr__(self):
+        return f"Pawn({self.color})"
+
+    def __str__(self):
+        return "♙" if self.color == "WHITE" else "♟"
+
     def __init__(self, color):
         self.color = color
 
@@ -33,5 +47,6 @@ class Pawn:
             right_diagonal = board[row + direction][col + 1]
             if right_diagonal is not None and right_diagonal.color != self.color:
                 moves.append((row + direction, col + 1))
+    
 
         return moves
