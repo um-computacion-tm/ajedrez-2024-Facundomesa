@@ -23,8 +23,14 @@ class Board:
     def is_empty(self, row, col):
         return self.grid[row][col] is None
 
-    def get_piece(self, row, col):
-        return self.grid[row][col]
-
     def set_piece(self, row, col, piece):
+        # Coloca una pieza en una posición específica
+        if not (0 <= row < 8 and 0 <= col < 8):
+            raise ValueError("Posición fuera del tablero")
         self.grid[row][col] = piece
+
+    def get_piece(self, row, col):
+        # Retorna la pieza en una posición específica
+        if not (0 <= row < 8 and 0 <= col < 8):
+            raise ValueError("Posición fuera del tablero")
+        return self.grid[row][col]

@@ -63,29 +63,11 @@ class TestCli(unittest.TestCase):
     def test_happy_path(self, mock_print):
         mock_print.assert_called_with("Expected message")
         self.assertEqual(mock_print.call_count, 2)
+        
+        print(mock_print.call_args_list)
+        
+        # Verificar el mensaje esperado
+        mock_print.assert_called_with("Expected message")  
 
-
-    # @patch(  # este patch controla lo que hace el input
-    #     'builtins.input',
-    #     side_effect=['1', '1', '2', '1'], # estos son los valores que simula lo que ingresaria el usuario
-    # )
-    # @patch('builtins.print') # este patch controla lo que hace el print
-    # @patch.object(
-    #     Chess,
-    #     'move',
-    #     side_effect=InvalidMove(),
-    # )
-    # def test_invalid_move(
-    #     self,
-    #     mock_chess_move,
-    #     mock_print,
-    #     mock_input,
-    # ): #
-    #     chess = Chess()
-    #     play(chess)
-    #     self.assertEqual(mock_input.call_count, 4)
-    #     self.assertEqual(mock_print.call_count, 2)
-    #     self.assertEqual(mock_chess_move.call_count, 1)
-
-
-
+if __name__ == '__main__':
+    unittest.main()
