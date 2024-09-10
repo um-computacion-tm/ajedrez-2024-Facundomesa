@@ -12,3 +12,15 @@ class InvalidMoveRookMove(InvalidMove):
     """Excepción lanzada cuando una torre intenta realizar un movimiento inválido."""
     def __init__(self, start, end):
         super().__init__(f"Movimiento inválido para la torre desde {start} hasta {end}.")
+    
+class InvalidMoveOutOfBounds(InvalidMove):
+    """Excepción lanzada cuando una pieza intenta moverse fuera del tablero."""
+    def __init__(self, position):
+        super().__init__(f"La posición {position} está fuera de los límites del tablero.")
+
+class InvalidMoveBlockedPath(InvalidMove):
+    """Excepción lanzada cuando una pieza intenta moverse a través de otras piezas."""
+    def __init__(self, start, end):
+        super().__init__(f"El camino de {start} a {end} está bloqueado por otra pieza.")
+
+

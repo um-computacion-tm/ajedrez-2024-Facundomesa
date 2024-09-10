@@ -41,8 +41,8 @@ class TestRook(unittest.TestCase):
         self.assertFalse(self.black_Rook.can_attack((2, 3), (1, 4)))
 
     def test_representation(self):
-        self.assertEqual(repr(self.white_Rook), "Rook(White)")
-        self.assertEqual(repr(self.black_Rook), "Rook(Black)")
+        self.assertEqual(repr(self.white_Rook), Rook("White"))
+        self.assertEqual(repr(self.black_Rook), Rook("Black"))
 
     def test_str(self):
         board = Board()
