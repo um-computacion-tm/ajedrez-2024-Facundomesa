@@ -1,6 +1,7 @@
 import unittest
 from game.exceptions import InvalidMove, InvalidMoveNoPiece, InvalidMoveRookMove
 from game.exceptions import InvalidMoveBlockedPath, InvalidMoveOutOfBounds
+from game.exceptions import InvalidMoveCheck, InvalidMoveKingMove
 
 class TestInvalidMoveExceptions(unittest.TestCase):
 
@@ -37,6 +38,16 @@ def test_invalid_move_blocked_path(self):
             raise InvalidMoveBlockedPath("d2", "d4")
         
         self.assertEqual(str(context.exception), "El camino de d2 a d4 está bloqueado por otra pieza.")
+
+def test_invalid_move_check(self):
+        with self.assertRaises(InvalidMoveCheck) as context:
+            raise InvalidMoveCheck()
+        self.assertEqual(str(context.exception), "El movimiento deja al rey en jaque.")
+
+def test_invalid_move_king(self):
+        with self.assertRaises(InvalidMoveKingMove) as context:
+            raise InvalidMoveKingMove("e1", "e3")
+        self.assertEqual(str(context.exception), "Movimiento inválido para el rey desde e1 hasta e3.")
 
 if __name__ == '__main__':
     unittest.main()
