@@ -33,4 +33,13 @@ class InvalidMoveKingMove(InvalidMove):
     def __init__(self, start, end):
         super().__init__(f"Movimiento inválido para el rey desde {start} hasta {end}.")
 
+class InvalidMovePawnMove(InvalidMove):
+    """Excepción lanzada cuando un peón intenta un movimiento inválido."""
+    def __init__(self, start, end):
+        super().__init__(f"Movimiento inválido para el peón desde {start} hasta {end}.")
+
+class InvalidMoveKnightMove(InvalidMove):
+    """Excepción lanzada cuando un caballo intenta realizar un movimiento inválido."""
+    def __init__(self, start, end):
+        super().__init__(f"Movimiento inválido para el caballo desde {start} hasta {end}.")
 

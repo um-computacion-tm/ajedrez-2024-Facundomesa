@@ -2,6 +2,7 @@ import unittest
 from game.exceptions import InvalidMove, InvalidMoveNoPiece, InvalidMoveRookMove
 from game.exceptions import InvalidMoveBlockedPath, InvalidMoveOutOfBounds
 from game.exceptions import InvalidMoveCheck, InvalidMoveKingMove
+from game.exceptions import InvalidMovePawnMove, InvalidMoveKnightMove
 
 class TestInvalidMoveExceptions(unittest.TestCase):
 
@@ -48,6 +49,16 @@ def test_invalid_move_king(self):
         with self.assertRaises(InvalidMoveKingMove) as context:
             raise InvalidMoveKingMove("e1", "e3")
         self.assertEqual(str(context.exception), "Movimiento inválido para el rey desde e1 hasta e3.")
+
+def test_invalid_move_pawn(self):
+        with self.assertRaises(InvalidMovePawnMove) as context:
+            raise InvalidMovePawnMove("e2", "e5")
+        self.assertEqual(str(context.exception), "Movimiento inválido para el peón desde e2 hasta e5.")
+
+def test_invalid_move_knight(self):
+        with self.assertRaises(InvalidMoveKnightMove) as context:
+            raise InvalidMoveKnightMove("g1", "g3")
+        self.assertEqual(str(context.exception), "Movimiento inválido para el caballo desde g1 hasta g3.")
 
 if __name__ == '__main__':
     unittest.main()
