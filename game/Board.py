@@ -34,3 +34,4 @@ class Board:
         if not (0 <= row < 8 and 0 <= col < 8):
             raise ValueError("Posición fuera del tablero")
         return self.grid[row][col]
+    

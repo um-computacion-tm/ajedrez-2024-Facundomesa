@@ -56,8 +56,48 @@ Modified Board
 
 Modified Test cli
 
-[0.0.13] 
+[0.0.13] 01-09-24
 
 Modified Piece and Test Piece
 
+[0.0.14] 02-09-24
 
+Modified Test cli 
+Modified Test Main
+Modified Test Rook
+
+[0.0.15] 05-09-24
+
+Modified Test Rook and Rook
+Modified Test Main 
+
+[0.0.16] 07-09-24
+
+Modified Pawn
+
+[0.0.17] 09-09-24
+
+Modified Board
+Modified Test Cli
+Modified Test Pawn
+Add Test Exception and Exception 
+Modified Test Queen 
+Modified Test Rook
+
+[0.0.18] 14-09-24
+
+Add More Exception and Tests
+
+[0.0.19] 15-09-24
+
+Changes in Test cli and Cli
+Changes in Test Main
+Changes in Game Chess
+
+[0.0.20] 18-09-24
+
+Trying to Change Game Chess
+Trying to Change Game Cli
+Trying to Change Test Cli
+
+[0.0.21] 
