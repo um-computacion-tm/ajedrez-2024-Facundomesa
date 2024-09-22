@@ -1,37 +1,41 @@
-from piezas.Rook import Rook
-
+from game.Piece import Piece
 
 class Board:
     def __init__(self):
-        self.__positions__ = []
-        for _ in range(8):
-            col = []
-            for _ in range(8):
-                col.append(None)
-            self.__positions__.append(col)
-        self.__positions__[0][0] = Rook("BLACK") # Black
-        self.__positions__[0][7] = Rook("BLACK") # Black
-        self.__positions__[7][7] = Rook("WHITE") # White
-        self.__positions__[7][0] = Rook("WHITE") # White
+        """
+        Inicializa un tablero vacío de 8x8. Cada celda del tablero empieza con None.
+        """
+        self._board = [[None for _ in range(8)] for _ in range(8)]
+    
+    def set_piece(self, row, col, color):
+        """
+        Coloca una pieza de un color específico en una posición (row, col).
+        """
+        self._board[row][col] = Piece(color)
 
     def get_piece(self, row, col):
-        return self.__positions__[row][col]
+        """
+        Retorna la pieza en la posición (row, col) o None si no hay pieza.
+        """
+        return self._board[row][col]
     
-    def __init__(self):
-        self.grid = [[None for _ in range(8)] for _ in range(8)]
+    def move_piece(self, from_row, from_col, to_row, to_col):
+        """
+        Mueve una pieza desde una posición a otra en el tablero.
+        Si no hay pieza en la posición de origen, lanza ValueError.
+        """
+        piece = self.get_piece(from_row, from_col)
+        if piece is None:
+            raise ValueError("No hay ninguna pieza en la posición de origen.")
+        
+        self._board[to_row][to_col] = piece  # Coloca la pieza en la nueva posición
+        self._board[from_row][from_col] = None  # Vacía la posición de origen
 
-    def is_empty(self, row, col):
-        return self.grid[row][col] is None
-
-    def set_piece(self, row, col, piece):
-        # Coloca una pieza en una posición específica
-        if not (0 <= row < 8 and 0 <= col < 8):
-            raise ValueError("Posición fuera del tablero")
-        self.grid[row][col] = piece
-
-    def get_piece(self, row, col):
-        # Retorna la pieza en una posición específica
-        if not (0 <= row < 8 and 0 <= col < 8):
-            raise ValueError("Posición fuera del tablero")
-        return self.grid[row][col]
-    
+    def __str__(self):
+        """
+        Devuelve una representación en cadena del tablero para depuración.
+        """
+        display = ""
+        for row in self._board:
+            display += " ".join(["." if piece is None else piece.color[0] for piece in row]) + "\n"
+        return display
