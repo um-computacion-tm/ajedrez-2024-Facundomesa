@@ -1,4 +1,5 @@
 from game.Board import Board
+from game.chess import Chess
 
 class Chess:
     def __init__(self):
