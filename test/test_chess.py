@@ -8,9 +8,9 @@ class TestChess(unittest.TestCase):
         Inicializa un objeto de la clase Chess y una configuración de tablero inicial.
         """
         self.chess = Chess()
-        # Suponiendo que Board tiene un método para agregar piezas en posiciones específicas.
-        self.chess._board.set_piece(1, 0, "WHITE")  # Coloca una pieza blanca en (1, 0)
-        self.chess._board.set_piece(6, 0, "BLACK")  # Coloca una pieza negra en (6, 0)
+        # Coloca una pieza blanca en (1, 0) y una negra en (6, 0)
+        self.chess._board.set_piece(1, 0, "WHITE")
+        self.chess._board.set_piece(6, 0, "BLACK")
 
     def test_initial_turn(self):
         """
@@ -29,16 +29,21 @@ class TestChess(unittest.TestCase):
         self.assertEqual(self.chess.turn, "WHITE", "El turno debería ser WHITE después de cambiar nuevamente.")
 
     def test_valid_move(self):
-
-    # Asegura que haya una pieza en (1, 0) antes de moverla
-        self.chess._board.set_piece(1, 0, "WHITE")  # Coloca una pieza blanca en (1, 0)
-
-    # Movimiento válido de una pieza blanca desde (1, 0) a (2, 0)
-    try:
-        self.chess.move(1, 0, 2, 0)  # Movimiento válido
-    except ValueError:
-        self.fail("move() lanzó ValueError inesperadamente para un movimiento válido.")
-
+        """
+        Verifica que un movimiento válido se ejecute correctamente.
+        """
+        # Asegura que haya una pieza blanca en (1, 0)
+        self.chess._board.set_piece(1, 0, "WHITE")
+        
+        # Movimiento válido de (1, 0) a (2, 0)
+        try:
+            self.chess.move(1, 0, 2, 0)  # Movimiento válido
+        except ValueError:
+            self.fail("move() lanzó ValueError inesperadamente para un movimiento válido.")
+        
+        # Verifica que la pieza haya sido movida
+        self.assertIsNone(self.chess._board.get_piece(1, 0), "La posición inicial debería estar vacía.")
+        self.assertEqual(self.chess._board.get_piece(2, 0), "WHITE", "La pieza debería estar en la nueva posición.")
 
     def test_invalid_move_out_of_bounds(self):
         """
@@ -58,7 +63,8 @@ class TestChess(unittest.TestCase):
         """
         Verifica que no se pueda mover una pieza a una posición ocupada por una pieza del mismo color.
         """
-        self.chess._board.set_piece(2, 0, "WHITE")  # Coloca una pieza blanca en la posición destino
+        # Coloca una pieza blanca en la posición destino (2, 0)
+        self.chess._board.set_piece(2, 0, "WHITE")
         with self.assertRaises(ValueError, msg="No puedes capturar tu propia pieza."):
             self.chess.move(1, 0, 2, 0)  # Intenta mover a una posición ocupada por una pieza blanca
 
@@ -69,6 +75,21 @@ class TestChess(unittest.TestCase):
         # Es el turno de 'WHITE', intentamos mover una pieza negra
         with self.assertRaises(ValueError, msg="No deberías poder mover una pieza negra en el turno de WHITE."):
             self.chess.move(6, 0, 5, 0)  # Intenta mover la pieza negra en el turno de 'WHITE'
+
+    def test_valid_move_changes_turn(self):
+        """
+        Verifica que después de un movimiento válido, el turno cambie al oponente.
+        """
+        self.chess.move(1, 0, 2, 0)  # Movimiento válido de pieza blanca
+        self.assertEqual(self.chess.turn, "BLACK", "El turno debería cambiar a BLACK después de un movimiento válido.")
+
+    def test_invalid_move_does_not_change_turn(self):
+        """
+        Verifica que un movimiento inválido no cambie el turno.
+        """
+        with self.assertRaises(ValueError):
+            self.chess.move(1, 0, 1, 0)  # Movimiento inválido (a la misma posición)
+        self.assertEqual(self.chess.turn, "WHITE", "El turno no debería cambiar después de un movimiento inválido.")
 
 if __name__ == '__main__':
     unittest.main()

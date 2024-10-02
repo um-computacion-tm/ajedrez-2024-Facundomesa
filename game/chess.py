@@ -1,57 +1,48 @@
 from game.Board import Board
 
-
 class Chess:
     def __init__(self):
         """
-        Inicializa un juego de ajedrez con un tablero vacío y con el turno inicial en 'WHITE'.
+        Inicializa el juego de ajedrez con un tablero y un turno inicial.
         """
         self._board = Board()
-        self._turn = "WHITE"  # El turno inicial es de las piezas blancas
+        self.turn = "WHITE"  # El turno inicial es para las piezas blancas
 
-    def move(self, from_row, from_col, to_row, to_col):
+    def move(self, start_row, start_col, end_row, end_col):
         """
-        Mueve una pieza desde (from_row, from_col) a (to_row, to_col).
-        Valida las coordenadas, verifica que la pieza es del turno actual y actualiza el turno.
+        Realiza un movimiento de una pieza desde una posición de inicio a una posición de destino.
         """
-        if not self._is_valid_move(from_row, from_col, to_row, to_col):
-            raise ValueError("Movimiento no válido: fuera de los límites del tablero.")
+        # Verifica si el movimiento está fuera de los límites del tablero
+        if not self._board.is_within_bounds(start_row, start_col) or not self._board.is_within_bounds(end_row, end_col):
+            raise ValueError("Movimiento fuera de los límites del tablero")
 
-        if from_row == to_row and from_col == to_col:
-            raise ValueError("Movimiento no válido: la posición de origen y destino son las mismas.")
+        # Verifica si se está intentando mover a la misma posición
+        if start_row == end_row and start_col == end_col:
+            raise ValueError("No puedes mover una pieza a la misma posición")
 
-        piece = self._board.get_piece(from_row, from_col)
+        # Obtiene la pieza en la posición inicial
+        piece = self._board.get_piece(start_row, start_col)
         if piece is None:
-            raise ValueError("No hay ninguna pieza en la posición de origen.")
+            raise ValueError("No hay una pieza en la posición inicial")
 
-        if piece.color != self._turn:
-            raise ValueError(f"Es el turno de {self._turn}. No puedes mover una pieza {piece.color}.")
+        # Verifica si la pieza es del color correcto según el turno
+        if piece != self.turn:
+            raise ValueError(f"No es el turno de {piece}")
 
-        destination_piece = self._board.get_piece(to_row, to_col)
-        if destination_piece is not None:
-            if destination_piece.color == self._turn:
-                raise ValueError("No puedes capturar tu propia pieza.")
+        # Verifica si la posición de destino está ocupada por una pieza del mismo color
+        destination_piece = self._board.get_piece(end_row, end_col)
+        if destination_piece == self.turn:
+            raise ValueError("No puedes mover una pieza a una posición ocupada por tu propia pieza")
 
-        # Mueve la pieza y cambia el turno
-        self._board.move_piece(from_row, from_col, to_row, to_col)
+        # Realiza el movimiento
+        self._board.set_piece(end_row, end_col, piece)
+        self._board.set_piece(start_row, start_col, None)
+
+        # Cambia el turno después del movimiento válido
         self._change_turn()
-
-    @property
-    def turn(self):
-        """
-        Retorna el turno actual ('WHITE' o 'BLACK').
-        """
-        return self._turn
 
     def _change_turn(self):
         """
-        Cambia el turno de juego entre 'WHITE' y 'BLACK'.
+        Cambia el turno entre 'WHITE' y 'BLACK'.
         """
-        self._turn = "BLACK" if self._turn == "WHITE" else "WHITE"
-
-    def _is_valid_move(self, from_row, from_col, to_row, to_col):
-        """
-        Verifica si un movimiento es válido, asegurando que las coordenadas están dentro de los límites del tablero.
-        """
-        return 0 <= from_row < 8 and 0 <= from_col < 8 and 0 <= to_row < 8 and 0 <= to_col < 8
-
+        self.turn = "BLACK" if self.turn == "WHITE" else "WHITE"
