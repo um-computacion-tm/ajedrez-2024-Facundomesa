@@ -41,8 +41,26 @@ class Board:
         for col in range(8):
             self.board[6][col] = Pawn("white")
 
+    def set_piece(self, row, col, piece):
+        """
+        Coloca una pieza en la posición especificada.
+        """
+        if self.is_within_bounds(row, col):
+            self.board[row][col] = piece
+        else:
+            raise ValueError("Posición fuera de los límites del tablero")
+
     def get_piece(self, row, col):
-        if 0 <= row < 8 and 0 <= col < 8:
+        """
+        Devuelve la pieza en la posición especificada.
+        """
+        if self.is_within_bounds(row, col):
             return self.board[row][col]
         else:
-            raise IndexError("Posición fuera del tablero")
+            raise ValueError("Posición fuera de los límites del tablero")
+
+    def is_within_bounds(self, row, col):
+        """
+        Verifica si la posición está dentro de los límites del tablero.
+        """
+        return 0 <= row < 8 and 0 <= col < 8
