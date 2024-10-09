@@ -1,4 +1,4 @@
-from piezas import Pawn
+from pawn import Pawn
 
 class Pawn:
     VALID_COLORS = {"WHITE", "BLACK"}

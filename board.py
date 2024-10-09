@@ -1,9 +1,9 @@
-from piezas.Rook import Rook
-from piezas.Knight import Knight
-from piezas.Bishop import Bishop
-from piezas.Queen import Queen
-from piezas.King import King
-from piezas.Pawn import Pawn
+from rook import Rook
+from knight import Knight
+from bishop import Bishop
+from queen import Queen
+from king import King
+from pawn import Pawn
 
 
 class Board:
@@ -64,3 +64,5 @@ class Board:
         Verifica si la posición está dentro de los límites del tablero.
         """
         return 0 <= row < 8 and 0 <= col < 8
+    
+    

@@ -1,5 +1,5 @@
 import unittest
-from test_Queen import Queen  
+from queen import Queen  
 
 class TestQueen(unittest.TestCase):
 

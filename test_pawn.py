@@ -1,5 +1,5 @@
 import unittest
-from piezas.Pawn import Pawn
+from pawn import Pawn
 
 class TestPawn(unittest.TestCase):
     def test_pawn_initialization(self):

@@ -1,4 +1,4 @@
-from game.chess import Chess
+from chess import Chess
 
 def main():
     chess = chess()  # Inicializa el tablero de ajedrez

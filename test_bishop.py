@@ -1,5 +1,5 @@
 import unittest
-from piezas.Bishop import Bishop
+from bishop import Bishop
 
 class TestBishop(unittest.TestCase):
     def test_Bishop_initialization(self):

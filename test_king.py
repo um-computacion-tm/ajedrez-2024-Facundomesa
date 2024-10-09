@@ -1,5 +1,5 @@
 import unittest
-from piezas.King import King
+from king import King
 
 
 class King:

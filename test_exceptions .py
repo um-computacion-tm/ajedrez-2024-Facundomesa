@@ -1,8 +1,8 @@
 import unittest
-from game.exceptions import InvalidMove, InvalidMoveNoPiece, InvalidMoveRookMove
-from game.exceptions import InvalidMoveBlockedPath, InvalidMoveOutOfBounds
-from game.exceptions import InvalidMoveCheck, InvalidMoveKingMove
-from game.exceptions import InvalidMovePawnMove, InvalidMoveKnightMove
+from exceptions import InvalidMove, InvalidMoveNoPiece, InvalidMoveRookMove
+from exceptions import InvalidMoveBlockedPath, InvalidMoveOutOfBounds
+from exceptions import InvalidMoveCheck, InvalidMoveKingMove
+from exceptions import InvalidMovePawnMove, InvalidMoveKnightMove
 
 class TestInvalidMoveExceptions(unittest.TestCase):
 
