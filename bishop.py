@@ -1,4 +1,8 @@
 class Bishop:
+    def use_rook(self):
+        from rook import Rook  
+        rook = Rook()
+        
     def __init__(self, color):
         self.color = color
 

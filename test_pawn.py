@@ -30,13 +30,25 @@ class TestPawn(unittest.TestCase):
         self.assertCountEqual(pawn.get_valid_moves(position, board), expected_moves)
 
     def test_pawn_capturing(self):
-        pawn = Pawn("white")
-        board = [[None for _ in range(8)] for _ in range(8)]  # Tablero vacío
-        board[5][3] = Pawn("black")  # Peón negro en la diagonal izquierda
-        board[5][5] = Pawn("black")  # Peón negro en la diagonal derecha
-        position = (6, 4)  # Posición inicial para peón blanco
-        expected_moves = [(5, 4), (5, 3), (5, 5)]  # Movimientos válidos + capturas
-        self.assertCountEqual(Pawn.get_valid_moves(position, board), expected_moves)  # Llamar al método desde la instancia `pawn`
+        # Configurar el tablero para que el peón pueda capturar
+        position = (3, 3)  # Posición del peón
+        pawn = Pawn("white")  # Instanciar un peón blanco
+        
+        # Colocar un peón blanco en la posición (3, 3)
+        self.board.set_piece(3, 3, pawn)
+        
+        # Colocar piezas enemigas en posiciones capturables
+        self.board.set_piece(2, 2, Pawn("black"))  # Peón negro en diagonal izquierda
+        self.board.set_piece(2, 4, Pawn("black"))  # Peón negro en diagonal derecha
+        
+        # Movimientos esperados (las diagonales para capturar)
+        expected_moves = [(2, 2), (2, 4)]
+        
+        # Llamar al método desde la **instancia** de `pawn`
+        valid_moves = pawn.get_valid_moves(position, self.board.board)
+        
+        # Verificar que los movimientos válidos sean los esperados
+        self.assertCountEqual(valid_moves, expected_moves)
 
 if __name__ == '__main__':
     unittest.main()

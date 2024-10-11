@@ -1,4 +1,7 @@
 class King:
+    def some_method(self):
+        from board import Board 
+        
     def __init__(self, color):
         self.color = color
 

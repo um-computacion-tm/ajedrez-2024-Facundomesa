@@ -1,5 +1,3 @@
-from pawn import Pawn
-
 class Pawn:
     VALID_COLORS = {"WHITE", "BLACK"}
 

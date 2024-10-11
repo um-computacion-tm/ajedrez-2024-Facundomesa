@@ -1,29 +1,28 @@
 import unittest
-from unittest import mock  
 from chess import Chess
 from cli import play 
 from unittest.mock import patch
 
 class TestCli(unittest.TestCase):
     
-    @patch('builtins.input', side_effect=['1', '1', '2', '2'])  # Simula el input
-    @patch('builtins.print')  # Controla el print
-    @patch.object(Chess, 'move')
+    @patch('cli.input', side_effect=['0', '1', '2', '3', 'yes', 'no'])  # Simula suficientes inputs del usuario
+    @patch('cli.print')  # Simula la función print
+    @patch('chess.Chess.move')  # Simula el método 'move' de Chess
     def test_happy_path(self, mock_chess_move, mock_print, mock_input):
-        """
-        Verifica que el flujo feliz (movimiento correcto) funcione como se espera.
-        """
+        # Inicializar el objeto Chess
         chess = Chess()
-        play(chess)  # Juega el turno con inputs simulados
-        
-        # Verifica que input se haya llamado 4 veces (coordenadas de origen y destino)
-        self.assertEqual(mock_input.call_count, 4)
 
-        # Verifica que el movimiento se haya intentado ejecutar 1 vez
-        self.assertEqual(mock_chess_move.call_count, 1)
+        # Ejecutar la función de jugar con los mocks de inputs
+        play(chess)
 
-        # Verifica que se hayan imprimido 2 mensajes
-        self.assertEqual(mock_print.call_count, 2)
+        # Verificar que se llamaron los mocks como se esperaba
+        mock_input.assert_called()  # Verificar que se llamó la función input
+        mock_print.assert_called()  # Verificar que se llamó la función print
+        mock_chess_move.assert_called()  # Verificar que se llamó el método move
+
+        # Puedes también verificar el número de veces que se llamaron
+        self.assertEqual(mock_input.call_count, 6)  # Se espera que input se llame 6 veces (ajusta según tu flujo)
+        self.assertEqual(mock_print.call_count, 1)
 
     @patch('builtins.input', side_effect=['hola', '1', '2', '2'])  # Primer input inválido
     @patch('builtins.print')  

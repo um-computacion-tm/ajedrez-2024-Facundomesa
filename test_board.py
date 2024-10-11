@@ -1,10 +1,4 @@
 import unittest
-from rook import Rook
-from knight import Knight
-from bishop import Bishop
-from queen import Queen
-from king import King
-from pawn import Pawn
 from board import Board
 
 class TestBoard(unittest.TestCase):
@@ -12,6 +6,14 @@ class TestBoard(unittest.TestCase):
         self.board = Board()
 
     def test_initial_positions(self):
+        # Importación diferida de las piezas para evitar dependencia circular
+        from rook import Rook
+        from knight import Knight
+        from bishop import Bishop
+        from queen import Queen
+        from king import King
+        from pawn import Pawn
+
         # Verificar las torres en las posiciones correctas
         self.assertIsInstance(self.board.get_piece(0, 0), Rook)
         self.assertEqual(self.board.get_piece(0, 0).color, "black")

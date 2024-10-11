@@ -1,4 +1,11 @@
 class Rook:
+    
+    def __init__(self, position):
+        self.position = position
+
+    def move(self, new_position):
+        self.position = new_position
+
     VALID_COLORS = {"WHITE", "BLACK"}
 
     def __init__(self, color, board=None):

@@ -1,18 +1,19 @@
-from rook import Rook
-from knight import Knight
-from bishop import Bishop
-from queen import Queen
-from king import King
-from pawn import Pawn
-
-
 class Board:
+         
     def __init__(self):
         # 8x8 matrix filled with None
         self.board = [[None for _ in range(8)] for _ in range(8)]
         self._initialize_pieces()
 
     def _initialize_pieces(self):
+        # Importación diferida para evitar dependencias circulares
+        from rook import Rook
+        from knight import Knight
+        from bishop import Bishop
+        from queen import Queen
+        from king import King
+        from pawn import Pawn
+
         # Black pieces (first row)
         self.board[0][0] = Rook("black")
         self.board[0][7] = Rook("black")
@@ -51,18 +52,14 @@ class Board:
             raise ValueError("Posición fuera de los límites del tablero")
 
     def get_piece(self, row, col):
-        """
-        Devuelve la pieza en la posición especificada.
-        """
         if self.is_within_bounds(row, col):
             return self.board[row][col]
         else:
-            raise ValueError("Posición fuera de los límites del tablero")
+            raise IndexError("Posición fuera de los límites del tablero")
+
 
     def is_within_bounds(self, row, col):
         """
         Verifica si la posición está dentro de los límites del tablero.
         """
         return 0 <= row < 8 and 0 <= col < 8
-    
-    
