@@ -14,12 +14,17 @@ class Rook:
         
         moves = []
 
-        # Movimientos verticales y horizontales
-        for i in range(8):
-            if i != row:
-                moves.append((i, col))  # Movimiento vertical
-            if i != col:
-                moves.append((row, i))  # Movimiento horizontal
+        # Movimientos verticales descendentes
+        moves += self.possible_positions_vd(row, col)
+        
+        # Movimientos verticales ascendentes
+        moves += self.possible_positions_va(row, col)
+        
+        # Movimientos horizontales a la derecha
+        moves += self.possible_positions_hr(row, col)
+        
+        # Movimientos horizontales a la izquierda
+        moves += self.possible_positions_hl(row, col)
 
         return moves
 
@@ -53,4 +58,28 @@ class Rook:
                     possibles.append((r, col))  # Puede capturar pieza enemiga
                 break
             possibles.append((r, col))  # Casilla vacía
+        return possibles
+
+    def possible_positions_hr(self, row, col):
+        """ Movimientos horizontales a la derecha (col++) """
+        possibles = []
+        for c in range(col + 1, 8):
+            piece = self.board.get_piece(row, c)
+            if piece:
+                if piece.color != self.color:
+                    possibles.append((row, c))  # Puede capturar pieza enemiga
+                break
+            possibles.append((row, c))  # Casilla vacía
+        return possibles
+
+    def possible_positions_hl(self, row, col):
+        """ Movimientos horizontales a la izquierda (col--) """
+        possibles = []
+        for c in range(col - 1, -1, -1):
+            piece = self.board.get_piece(row, c)
+            if piece:
+                if piece.color != self.color:
+                    possibles.append((row, c))  # Puede capturar pieza enemiga
+                break
+            possibles.append((row, c))  # Casilla vacía
         return possibles

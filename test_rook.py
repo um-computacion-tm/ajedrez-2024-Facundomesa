@@ -5,9 +5,9 @@ from pawn import Pawn
 
 class TestRook(unittest.TestCase):
     def setUp(self):
-        self.white_Rook = Rook("White")
-        self.black_Rook = Rook("Black")
         self.board = Board()
+        self.white_Rook = Rook("WHITE", self.board)
+        self.black_Rook = Rook("BLACK", self.board)
 
     def test_color_validation(self):
         with self.assertRaises(ValueError):
@@ -42,32 +42,25 @@ class TestRook(unittest.TestCase):
         self.assertFalse(self.black_Rook.can_attack((2, 3), (1, 4)))
 
     def test_representation(self):
-        self.assertEqual(repr(self.white_Rook), Rook("White"))
-        self.assertEqual(repr(self.black_Rook), Rook("Black"))
+        self.assertEqual(repr(self.white_Rook), "Rook(WHITE)")
+        self.assertEqual(repr(self.black_Rook), "Rook(BLACK)")
 
     def test_str(self):
-        board = Board()
-        rook = Rook("WHITE", board)
+        rook = Rook("WHITE", self.board)
         self.assertEqual(str(rook), "♖")  # Torre blanca, ♖, negra sería ♜
 
     def test_move_vertical_desc(self):
-        board = Board()
-        rook = Rook("WHITE", board)
-        possibles = rook.possible_positions_vd(4, 1)
+        possibles = self.white_Rook.possible_positions_vd(4, 1)
         self.assertEqual(possibles, [(5, 1), (6, 1), (7, 1)])
 
     def test_move_vertical_asc(self):
-        board = Board()
-        rook = Rook("WHITE", board)
-        possibles = rook.possible_positions_va(4, 1)
+        possibles = self.white_Rook.possible_positions_va(4, 1)
         self.assertEqual(possibles, [(3, 1), (2, 1), (1, 1), (0, 1)])
 
     def test_move_vertical_desc_with_own_piece(self):
-        board = Board()
-        board.set_piece(6, 1, Pawn("WHITE", board))
-        rook = Rook("WHITE", board)
-        board.set_piece(4, 1, rook)
-        possibles = rook.possible_positions_vd(4, 1)
+        self.board.set_piece(6, 1, Pawn("WHITE", self.board))
+        self.board.set_piece(4, 1, self.white_Rook)
+        possibles = self.white_Rook.possible_positions_vd(4, 1)
         self.assertEqual(possibles, [(5, 1)])  # La torre no puede saltar piezas propias
 
     def test_move_vertical_desc_with_not_own_piece(self):
@@ -77,12 +70,13 @@ class TestRook(unittest.TestCase):
         # Colocar un peón negro en la posición (6, 1)
         self.board.set_piece(6, 1, Pawn("BLACK", self.board))
 
-        # Movimientos esperados (descendiendo verticalmente sin obstrucción de su propia pieza)
-        valid_moves = self.white_Rook.valid_moves((7, 1))
-        expected_moves = [(6, 1)]  # El peón negro puede ser capturado
+        # Movimientos esperados: la torre puede capturar el peón en (6, 1)
+        valid_moves = self.white_Rook.possible_positions_vd(7, 1)
+        expected_moves = [(6, 1)]  # El peón negro en (6, 1) puede ser capturado
 
-        # Verificar que los movimientos válidos incluyan capturar el peón negro
+        # Verificar que los movimientos válidos sean los esperados
         self.assertEqual(valid_moves, expected_moves)
 
 if __name__ == '__main__':
     unittest.main()
+
