@@ -1,11 +1,4 @@
 class Rook:
-    
-    def __init__(self, position):
-        self.position = position
-
-    def move(self, new_position):
-        self.position = new_position
-
     VALID_COLORS = {"WHITE", "BLACK"}
 
     def __init__(self, color, board=None):
@@ -43,8 +36,9 @@ class Rook:
     def possible_positions_vd(self, row, col):
         possibles = []
         for r in range(row + 1, 8):
-            if self.board.get_piece(r, col):
-                if self.board.get_piece(r, col).color != self.color:
+            piece = self.board.get_piece(r, col)
+            if piece:
+                if piece.color != self.color:
                     possibles.append((r, col))  # Puede capturar pieza enemiga
                 break
             possibles.append((r, col))  # Casilla vacía
@@ -53,8 +47,9 @@ class Rook:
     def possible_positions_va(self, row, col):
         possibles = []
         for r in range(row - 1, -1, -1):
-            if self.board.get_piece(r, col):
-                if self.board.get_piece(r, col).color != self.color:
+            piece = self.board.get_piece(r, col)
+            if piece:
+                if piece.color != self.color:
                     possibles.append((r, col))  # Puede capturar pieza enemiga
                 break
             possibles.append((r, col))  # Casilla vacía

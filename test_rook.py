@@ -72,18 +72,17 @@ class TestRook(unittest.TestCase):
 
     def test_move_vertical_desc_with_not_own_piece(self):
         # Colocar una torre blanca en la posición (7, 1)
-        self.board.set_piece(7, 1, self.rook)
+        self.board.set_piece(7, 1, self.white_Rook)
 
         # Colocar un peón negro en la posición (6, 1)
-        self.board.set_piece(6, 1, Pawn("black"))
+        self.board.set_piece(6, 1, Pawn("BLACK", self.board))
 
         # Movimientos esperados (descendiendo verticalmente sin obstrucción de su propia pieza)
-        valid_moves = self.rook.get_valid_moves((7, 1), self.board.board)
+        valid_moves = self.white_Rook.valid_moves((7, 1))
         expected_moves = [(6, 1)]  # El peón negro puede ser capturado
 
         # Verificar que los movimientos válidos incluyan capturar el peón negro
-        self.assertIn((6, 1), valid_moves)
-        
+        self.assertEqual(valid_moves, expected_moves)
+
 if __name__ == '__main__':
     unittest.main()
-
