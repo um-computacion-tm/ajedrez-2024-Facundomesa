@@ -1,7 +1,7 @@
 from chess import Chess
 
 def main():
-    chess = chess()  # Inicializa el tablero de ajedrez
+    chess = Chess()  # Inicializa el tablero de ajedrez
     while True:
         play(chess)
 
@@ -9,7 +9,7 @@ def play(chess):
     try:
         # Muestra el tablero y el turno actual
         print(chess.show_board())
-        print("Turno: ", chess.turn)
+        print(f"Turno actual: {chess.turn}")  # Modificación en el mensaje del turno
         
         # Solicita las coordenadas de la pieza a mover
         from_row = int(input("Desde la fila: "))
@@ -24,3 +24,4 @@ def play(chess):
 
 if __name__ == '__main__':
     main()
+

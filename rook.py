@@ -1,7 +1,9 @@
+from board import Board
+
 class Rook:
     VALID_COLORS = {"WHITE", "BLACK"}
 
-    def __init__(self, color, board=None):
+    def __init__(self, color, board:Board = None):
         if color.upper() not in Rook.VALID_COLORS:
             raise ValueError(f"Color inválido: {color}")
         self.color = color.upper()
@@ -51,7 +53,7 @@ class Rook:
             else:
                 break  # Bloqueada por una pieza del mismo color
 
-        # Movimiento hacia la derecha (misma fila, columnas aumentando)
+        # Movimiento hacia la derecha (mismapytp fila, columnas aumentando)
         for c in range(col + 1, 8):
             if board[row][c] is None:
                 valid_moves.append((row, c))
@@ -73,9 +75,10 @@ class Rook:
     def __str__(self):
         return "♖" if self.color == "WHITE" else "♜"
 
-    def possible_positions_vd(self, row, col):
+    def possible_positions_vd(self, row, col, increment=1):
         possibles = []
-        for r in range(row + 1, 8):
+        dest = 8 if increment==1 else 1
+        for r in range(row + increment, dest, increment):
             piece = self.board.get_piece(r, col)
             if piece:
                 if piece.color != self.color:

@@ -1,7 +1,6 @@
 [run]
-source =
-    game
-    piezas
+source = 
+    .
 omit =
     venv/*
     entorno/*

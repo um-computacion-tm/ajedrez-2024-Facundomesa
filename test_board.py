@@ -67,13 +67,14 @@ class TestBoard(unittest.TestCase):
                 self.assertIsNone(self.board.get_piece(row, col))
 
     def test_invalid_positions(self):
-        # Verificar que acceder a una posición fuera del tablero devuelva None o lance una excepción
         with self.assertRaises(IndexError):
-            self.board.get_piece(-1, 0)
+            self.board.get_piece(-1, 0)  # Posición inválida, fuera del tablero
         with self.assertRaises(IndexError):
-            self.board.get_piece(8, 0)
+            self.board.get_piece(8, 0)  # Posición inválida, fuera del tablero
         with self.assertRaises(IndexError):
-            self.board.get_piece(0, 8)
+            self.board.get_piece(0, -1)  # Posición inválida, fuera del tablero
+        with self.assertRaises(IndexError):
+            self.board.get_piece(0, 8)  # Posición inválida, fuera del tablero
 
 if __name__ == "__main__":
     unittest.main()

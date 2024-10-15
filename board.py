@@ -1,9 +1,10 @@
 class Board:
          
-    def __init__(self):
+    def __init__(self, forTest=False):
         # 8x8 matrix filled with None
         self.board = [[None for _ in range(8)] for _ in range(8)]
-        self._initialize_pieces()
+        if not forTest:
+            self._initialize_pieces()
 
     def _initialize_pieces(self):
         # Importación diferida para evitar dependencias circulares
@@ -41,25 +42,19 @@ class Board:
         # White pawns (seventh row)
         for col in range(8):
             self.board[6][col] = Pawn("white")
-
+    
     def set_piece(self, row, col, piece):
-        """
-        Coloca una pieza en la posición especificada.
-        """
-        if self.is_within_bounds(row, col):
-            self.board[row][col] = piece
-        else:
-            raise ValueError("Posición fuera de los límites del tablero")
+        """Coloca una pieza en la posición especificada."""
+        if not self.is_within_bounds(row, col):
+            raise IndexError("Posición fuera del tablero.")
+        self.board[row][col] = piece
 
     def get_piece(self, row, col):
-        if self.is_within_bounds(row, col):
-            return self.board[row][col]
-        else:
-            raise IndexError("Posición fuera de los límites del tablero")
-
+        """Devuelve la pieza en la posición especificada."""
+        if not self.is_within_bounds(row, col):
+            raise IndexError("Posición fuera del tablero.")
+        return self.board[row][col]
 
     def is_within_bounds(self, row, col):
-        """
-        Verifica si la posición está dentro de los límites del tablero.
-        """
+        """Verifica si una posición está dentro de los límites del tablero."""
         return 0 <= row < 8 and 0 <= col < 8

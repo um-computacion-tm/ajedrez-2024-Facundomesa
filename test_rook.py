@@ -3,9 +3,11 @@ from rook import Rook
 from board import Board
 from pawn import Pawn
 
+#import ipdb
+
 class TestRook(unittest.TestCase):
     def setUp(self):
-        self.board = [[None for _ in range(8)] for _ in range(8)]  # Crear un tablero vacío
+        self.board = Board()
         self.white_Rook = Rook("WHITE", self.board)
         self.black_Rook = Rook("BLACK", self.board)
 
@@ -16,19 +18,25 @@ class TestRook(unittest.TestCase):
             Rook("")  # Color vacío
 
     def test_valid_moves_from_center(self):
+        self.white_Rook = Rook("WHITE", self.board)
+        self.board = [[None for _ in range(8)] for _ in range(8)]  # Crear un tablero vacío
+    
         # Movimientos esperados desde la posición (4, 4)
         expected_moves = [
             (4, 0), (4, 1), (4, 2), (4, 3), (4, 5), (4, 6), (4, 7),  # Movimientos horizontales
             (0, 4), (1, 4), (2, 4), (3, 4), (5, 4), (6, 4), (7, 4)   # Movimientos verticales
         ]
-        
+    
         # Llamar a valid_moves con la posición y el tablero
         valid_moves = self.white_Rook.valid_moves((4, 4), self.board)
-        
+    
         # Comparar los movimientos calculados con los movimientos esperados
         self.assertEqual(set(valid_moves), set(expected_moves))
 
     def test_invalid_position(self):
+        self.white_Rook = Rook("WHITE", self.board)
+        self.board = [[None for _ in range(8)] for _ in range(8)]
+    
         # Intentar obtener movimientos de una posición inválida
         with self.assertRaises(ValueError):  # Esperamos que se lance un ValueError
             self.white_Rook.valid_moves((8, 8), self.board)  # Posición fuera del tablero
@@ -48,31 +56,35 @@ class TestRook(unittest.TestCase):
     def test_representation(self):
         self.assertEqual(repr(self.white_Rook), "Rook(WHITE)")
         self.assertEqual(repr(self.black_Rook), "Rook(BLACK)")
-
+    #ipdb.set_trace()
     def test_str(self):
         rook = Rook("WHITE", self.board)
         self.assertEqual(str(rook), "♖")  # Torre blanca, ♖, negra sería ♜
-
+   
     def test_move_vertical_desc(self):
         possibles = self.white_Rook.possible_positions_vd(4, 1)
-        self.assertEqual(possibles, [(5, 1), (6, 1), (7, 1)])
+        self.assertEqual(possibles, [(5, 1)])
 
     def test_move_vertical_asc(self):
         possibles = self.white_Rook.possible_positions_va(4, 1)
-        self.assertEqual(possibles, [(3, 1), (2, 1), (1, 1), (0, 1)])
+        self.assertEqual(possibles, [(3, 1), (2, 1), (1, 1)])
 
     def test_move_vertical_desc_with_own_piece(self):
-        self.board[6][1] = Pawn("WHITE", self.board)
-        self.board[4][1] = self.white_Rook
+        self.board.set_piece(6, 1, Pawn("WHITE", self.board))
+        self.board.set_piece(4, 1, self.white_Rook)
         possibles = self.white_Rook.possible_positions_vd(4, 1)
         self.assertEqual(possibles, [(5, 1)])  # La torre no puede saltar piezas propias
 
     def test_move_vertical_desc_with_not_own_piece(self):
-        self.board[7][1] = self.white_Rook
-        self.board[6][1] = Pawn("BLACK", self.board)
-        
+        # Colocar una torre blanca en la posición (7, 1)
+        self.board.set_piece(7, 1, self.white_Rook)
+
+        # Colocar un peón negro en la posición (6, 1)
+        self.board.set_piece(6, 1, Pawn("BLACK", self.board))
+
+        # ipdb.set_trace()
         # Movimientos esperados: la torre puede capturar el peón en (6, 1)
-        valid_moves = self.white_Rook.possible_positions_vd(7, 1)
+        valid_moves = self.white_Rook.possible_positions_vd(7, 1, -1)
         expected_moves = [(6, 1)]  # El peón negro en (6, 1) puede ser capturado
 
         # Verificar que los movimientos válidos sean los esperados
