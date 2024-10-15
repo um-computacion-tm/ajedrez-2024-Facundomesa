@@ -7,26 +7,61 @@ class Rook:
         self.color = color.upper()
         self.board = board
 
-    def valid_moves(self, position):
+    def valid_moves(self, position, board=None):
+        if board is None:
+            board = self.board  # Si no se pasa un board, usa el de la instancia
+        if board is None:
+            raise ValueError("Se requiere un tablero (board) para calcular los movimientos.")
+        
         row, col = position
+
+        # Verificar si la posición está fuera del tablero
         if not (0 <= row < 8 and 0 <= col < 8):
-            raise ValueError("Posición fuera del tablero")
-        
-        moves = []
+            raise ValueError(f"Posición inválida: {position}")
 
-        # Movimientos verticales descendentes
-        moves += self.possible_positions_vd(row, col)
-        
-        # Movimientos verticales ascendentes
-        moves += self.possible_positions_va(row, col)
-        
-        # Movimientos horizontales a la derecha
-        moves += self.possible_positions_hr(row, col)
-        
-        # Movimientos horizontales a la izquierda
-        moves += self.possible_positions_hl(row, col)
+        valid_moves = []
 
-        return moves
+        # Movimiento hacia arriba (misma columna, filas decreciendo)
+        for r in range(row - 1, -1, -1):
+            if board[r][col] is None:
+                valid_moves.append((r, col))
+            elif board[r][col].color != self.color:
+                valid_moves.append((r, col))  # Captura de una pieza del oponente
+                break
+            else:
+                break  # Bloqueada por una pieza del mismo color
+
+        # Movimiento hacia abajo (misma columna, filas aumentando)
+        for r in range(row + 1, 8):
+            if board[r][col] is None:
+                valid_moves.append((r, col))
+            elif board[r][col].color != self.color:
+                valid_moves.append((r, col))  # Captura de una pieza del oponente
+                break
+            else:
+                break  # Bloqueada por una pieza del mismo color
+
+        # Movimiento hacia la izquierda (misma fila, columnas decreciendo)
+        for c in range(col - 1, -1, -1):
+            if board[row][c] is None:
+                valid_moves.append((row, c))
+            elif board[row][c].color != self.color:
+                valid_moves.append((row, c))  # Captura de una pieza del oponente
+                break
+            else:
+                break  # Bloqueada por una pieza del mismo color
+
+        # Movimiento hacia la derecha (misma fila, columnas aumentando)
+        for c in range(col + 1, 8):
+            if board[row][c] is None:
+                valid_moves.append((row, c))
+            elif board[row][c].color != self.color:
+                valid_moves.append((row, c))  # Captura de una pieza del oponente
+                break
+            else:
+                break  # Bloqueada por una pieza del mismo color
+
+        return valid_moves
 
     def can_attack(self, from_pos, to_pos):
         # Solo puede atacar en la misma fila o columna
