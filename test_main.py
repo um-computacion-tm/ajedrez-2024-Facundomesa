@@ -1,27 +1,19 @@
 import unittest
 from unittest.mock import patch
-from chess import Chess
-from main import play
-from unittest import mock
+from main import main  # Asegúrate de que el nombre del archivo sea correcto
 
-class TestChessGame(unittest.TestCase):
+class TestMainFunction(unittest.TestCase):
+    @patch('main.play')  # Simula la función play
+    @patch('main.Chess')  # Simula la clase Chess
+    def test_main_calls_play_with_chess_instance(self, mock_chess, mock_play):
+        mock_chess_instance = mock_chess.return_value  # Obtiene la instancia simulada de Chess
+        main()  # Llama a la función main
 
-    @patch('builtins.input', side_effect=['1', '0', '2', '0'])
-    @mock.patch('builtins.print')
-    def test_valid_move(self, mock_print, mock_input):
-        chess = Chess()
-        play(chess)
-        self.assertTrue(mock_print.called)
-        # Cambiado el mensaje esperado para que coincida con el mensaje real en `play`
-    
-    @patch('builtins.input', side_effect=['0', '0', '2', '2'])
-    @mock.patch('builtins.print') 
-    def test_invalid_move(self, mock_print, mock_input):
-        chess = Chess()
-        play(chess)
-        self.assertTrue(mock_print.called)
-        # Verifica que se imprima un mensaje de error específico
-        mock_print.assert_any_call("Error:", unittest.mock.ANY)
+        # Verifica que se creó una instancia de Chess
+        mock_chess.assert_called_once()
+        
+        # Verifica que se llamó a play con la instancia de Chess
+        mock_play.assert_called_once_with(mock_chess_instance)
 
 if __name__ == '__main__':
     unittest.main()

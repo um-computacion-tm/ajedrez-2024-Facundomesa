@@ -1,45 +1,34 @@
-
+# Exceptions
 class InvalidMove(Exception):
-    """Excepción base para movimientos inválidos."""
-    pass
+    message = "Invalid piece movement"
+    def __str__(self):
+        return self.message
 
-class InvalidMoveNoPiece(InvalidMove):
-    """Excepción lanzada cuando se intenta mover desde una posición sin pieza."""
-    def __init__(self, position):
-        super().__init__(f"No hay ninguna pieza en la posición {position}.")
+class OutOfBoundsError(InvalidMove):
+    message = "Row and column values must be between 0 and 7."
 
-class InvalidMoveRookMove(InvalidMove):
-    """Excepción lanzada cuando una torre intenta realizar un movimiento inválido."""
-    def __init__(self, start, end):
-        super().__init__(f"Movimiento inválido para la torre desde {start} hasta {end}.")
-    
-class InvalidMoveOutOfBounds(InvalidMove):
-    """Excepción lanzada cuando una pieza intenta moverse fuera del tablero."""
-    def __init__(self, position):
-        super().__init__(f"La posición {position} está fuera de los límites del tablero.")
+class NonNumericInputError(InvalidMove):
+    message = "You must enter numeric values between 0 and 7."
 
-class InvalidMoveBlockedPath(InvalidMove):
-    """Excepción lanzada cuando una pieza intenta moverse a través de otras piezas."""
-    def __init__(self, start, end):
-        super().__init__(f"El camino de {start} a {end} está bloqueado por otra pieza.")
+class WrongTurnError(InvalidMove):
+    message = "It is not the turn of the selected piece."
 
-class InvalidMoveCheck(InvalidMove):
-    """Excepción lanzada cuando el movimiento deja al rey en jaque."""
-    def __init__(self):
-        super().__init__("El movimiento deja al rey en jaque.")
-        
-class InvalidMoveKingMove(InvalidMove):
-    """Excepción lanzada cuando el rey intenta realizar un movimiento inválido."""
-    def __init__(self, start, end):
-        super().__init__(f"Movimiento inválido para el rey desde {start} hasta {end}.")
+class InvalidPieceMoveError(InvalidMove):
+    message = "Invalid move for the selected piece."
 
-class InvalidMovePawnMove(InvalidMove):
-    """Excepción lanzada cuando un peón intenta un movimiento inválido."""
-    def __init__(self, start, end):
-        super().__init__(f"Movimiento inválido para el peón desde {start} hasta {end}.")
+class NonPieceOriginError(InvalidMove):
+    message = "There is no piece at the origin position."
 
-class InvalidMoveKnightMove(InvalidMove):
-    """Excepción lanzada cuando un caballo intenta realizar un movimiento inválido."""
-    def __init__(self, start, end):
-        super().__init__(f"Movimiento inválido para el caballo desde {start} hasta {end}.")
+class NonCaptureOwnPieceError(InvalidMove):
+    message = "You cannot capture your own pieces."
 
+class NonPassOverPieceError(InvalidMove):
+    message = "You cannot pass over other pieces."
+
+class NonCaptureForwardError(InvalidMove):
+    message = "You cannot capture forward."
+      
+class GameOverException(Exception):
+    def __init__(self, message):
+        self.message = message
+        super().__init__(message)

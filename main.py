@@ -1,27 +1,10 @@
 from chess import Chess
+from cli import play
 
 def main():
-    chess = Chess()  # Inicializa el tablero de ajedrez
-    while True:
-        play(chess)
+    ajedrez = Chess()  # Crear la instancia del juego
+    play(ajedrez)      # Pasar el objeto del juego a la función play
 
-def play(chess):
-    try:
-        # Muestra el tablero y el turno actual
-        print(chess.show_board())
-        print(f"Turno actual: {chess.turn}")  # Modificación en el mensaje del turno
-        
-        # Solicita las coordenadas de la pieza a mover
-        from_row = int(input("Desde la fila: "))
-        from_col = int(input("Desde la columna: "))
-        to_row = int(input("Hacia la fila: "))
-        to_col = int(input("Hacia la columna: "))
-        
-        # Realiza el movimiento
-        chess.move(from_row, from_col, to_row, to_col)
-    except Exception as e:
-        print("Error:", e)
-
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
 

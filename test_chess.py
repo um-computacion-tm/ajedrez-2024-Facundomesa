@@ -1,95 +1,115 @@
 import unittest
 from chess import Chess
+from exceptions import NonPieceOriginError, WrongTurnError, InvalidPieceMoveError
 
 class TestChess(unittest.TestCase):
 
     def setUp(self):
         """
-        Inicializa un objeto de la clase Chess y una configuración de tablero inicial.
+        Inicializa un objeto de la clase Chess y configura el tablero inicial.
         """
         self.chess = Chess()
-        # Coloca una pieza blanca en (1, 0) y una negra en (6, 0)
-        self.chess._board.set_piece(1, 0, "WHITE")
-        self.chess._board.set_piece(6, 0, "BLACK")
+        self.chess._board.set_piece(6, 0, "WHITE")  # Coloca un peón blanco en (6, 0)
+        self.chess._board.set_piece(7, 1, "WHITE")  # Coloca un caballo blanco en (7, 1)
+        self.chess._board.set_piece(1, 0, "BLACK")  # Coloca un peón negro en (1, 0)
+        self.chess._board.set_piece(1, 1, "BLACK")  # Coloca otro peón negro en (1, 1)
 
-    def test_initial_turn(self):
+    def test_initialization(self):
         """
-        Verifica que el turno inicial sea 'WHITE'.
+        Verifica que el juego se inicializa correctamente.
         """
         self.assertEqual(self.chess.turn, "WHITE", "El turno inicial debería ser WHITE.")
+        self.assertIsNotNone(self.chess.get_board(), "El tablero no debería estar vacío.")
 
-    def test_change_turn(self):
+    def test_valid_pawn_move(self):
         """
-        Verifica que el turno cambie correctamente entre 'WHITE' y 'BLACK'.
+        Verifica que un peón se mueva correctamente.
         """
-        self.chess._change_turn()
-        self.assertEqual(self.chess.turn, "BLACK", "El turno debería ser BLACK después de cambiar.")
-        
-        self.chess._change_turn()
-        self.assertEqual(self.chess.turn, "WHITE", "El turno debería ser WHITE después de cambiar nuevamente.")
+        self.chess.realizar_movimiento(6, 0, 4, 0)  # Mueve el peón blanco de (6, 0) a (4, 0)
+        self.assertEqual(self.chess.turn, "BLACK", "El turno debería cambiar a BLACK.")
+        self.assertEqual(self.chess.get_board()[6][0], '.', "La posición (6, 0) debería estar vacía.")
+        self.assertIsNotNone(self.chess.get_board()[4][0], "La posición (4, 0) debería tener una pieza.")
 
-    def test_valid_move(self):
+    def test_valid_knight_move(self):
         """
-        Verifica que un movimiento válido se ejecute correctamente.
+        Verifica que un caballo se mueva correctamente.
         """
-        # Asegura que haya una pieza blanca en (1, 0)
-        self.chess._board.set_piece(1, 0, "WHITE")
-        
-        # Movimiento válido de (1, 0) a (2, 0)
-        try:
-            self.chess.move(1, 0, 2, 0)  # Movimiento válido
-        except ValueError:
-            self.fail("move() lanzó ValueError inesperadamente para un movimiento válido.")
-        
-        # Verifica que la pieza haya sido movida
-        self.assertIsNone(self.chess._board.get_piece(1, 0), "La posición inicial debería estar vacía.")
-        self.assertEqual(self.chess._board.get_piece(2, 0), "WHITE", "La pieza debería estar en la nueva posición.")
+        self.chess.realizar_movimiento(7, 1, 5, 2)  # Mueve el caballo de (7, 1) a (5, 2)
+        self.assertEqual(self.chess.turn, "BLACK", "El turno debería cambiar a BLACK.")
+        self.assertEqual(self.chess.get_board()[7][1], '.', "La posición (7, 1) debería estar vacía.")
+        self.assertIsNotNone(self.chess.get_board()[5][2], "La posición (5, 2) debería tener una pieza.")
 
-    def test_invalid_move_out_of_bounds(self):
+    def test_invalid_pawn_move(self):
         """
-        Verifica que se lance un error al intentar mover fuera de los límites del tablero.
+        Verifica que se lance una excepción si un peón se mueve a una posición inválida.
         """
-        with self.assertRaises(ValueError, msg="El movimiento fuera de los límites no debería ser permitido."):
-            self.chess.move(-1, 0, 8, 0)  # Movimiento fuera de los límites
+        with self.assertRaises(InvalidPieceMoveError) as context:
+            self.chess.realizar_movimiento(6, 0, 3, 0)  # Movimiento inválido
+        self.assertEqual(str(context.exception), "Invalid move for the selected piece.")
 
-    def test_move_to_same_position(self):
+    def test_move_without_piece(self):
         """
-        Verifica que se lance un error si se intenta mover a la misma posición.
+        Verifica que se lance una excepción al intentar mover desde una posición sin pieza.
         """
-        with self.assertRaises(ValueError, msg="No deberías poder mover una pieza a la misma posición."):
-            self.chess.move(1, 0, 1, 0)  # Movimiento a la misma posición
+        with self.assertRaises(NonPieceOriginError) as context:
+            self.chess.realizar_movimiento(3, 3, 4, 3)  # Intento de mover sin pieza
+        self.assertEqual(str(context.exception), "There is no piece at the origin position.")
 
-    def test_move_to_occupied_position_by_own_piece(self):
+    def test_invalid_turn(self):
         """
-        Verifica que no se pueda mover una pieza a una posición ocupada por una pieza del mismo color.
+        Verifica que se lance una excepción si el turno es incorrecto.
         """
-        # Coloca una pieza blanca en la posición destino (2, 0)
-        self.chess._board.set_piece(2, 0, "WHITE")
-        with self.assertRaises(ValueError, msg="No puedes capturar tu propia pieza."):
-            self.chess.move(1, 0, 2, 0)  # Intenta mover a una posición ocupada por una pieza blanca
+        self.chess.realizar_movimiento(6, 0, 4, 0)  # Mueve el peón blanco
+        with self.assertRaises(WrongTurnError) as context:
+            self.chess.realizar_movimiento(1, 0, 2, 0)  # Intenta mover un peón negro
+        self.assertEqual(str(context.exception), "It is not the turn of the selected piece.")
 
-    def test_move_wrong_turn(self):
+    def test_move_to_own_piece_position(self):
         """
-        Verifica que no se pueda mover una pieza cuando no es el turno del jugador.
+        Verifica que no se pueda mover a una posición ocupada por una pieza propia.
         """
-        # Es el turno de 'WHITE', intentamos mover una pieza negra
-        with self.assertRaises(ValueError, msg="No deberías poder mover una pieza negra en el turno de WHITE."):
-            self.chess.move(6, 0, 5, 0)  # Intenta mover la pieza negra en el turno de 'WHITE'
+        self.chess.realizar_movimiento(6, 0, 4, 0)  # Mueve el peón blanco
+        with self.assertRaises(InvalidPieceMoveError) as context:
+            self.chess.realizar_movimiento(1, 1, 2, 0)  # Intenta mover un peón negro a (2, 0)
+        self.assertEqual(str(context.exception), "You cannot capture your own piece.")
 
-    def test_valid_move_changes_turn(self):
+    def test_turn_change_after_valid_move(self):
         """
-        Verifica que después de un movimiento válido, el turno cambie al oponente.
+        Verifica que el turno cambie correctamente después de un movimiento válido.
         """
-        self.chess.move(1, 0, 2, 0)  # Movimiento válido de pieza blanca
-        self.assertEqual(self.chess.turn, "BLACK", "El turno debería cambiar a BLACK después de un movimiento válido.")
+        self.chess.realizar_movimiento(6, 0, 4, 0)  # Mueve el peón blanco
+        self.assertEqual(self.chess.turn, "BLACK", "El turno debería ser BLACK después del movimiento.")
+        self.chess.realizar_movimiento(1, 0, 2, 0)  # Mueve el peón negro
+        self.assertEqual(self.chess.turn, "WHITE", "El turno debería ser WHITE después del movimiento.")
 
     def test_invalid_move_does_not_change_turn(self):
         """
         Verifica que un movimiento inválido no cambie el turno.
         """
-        with self.assertRaises(ValueError):
-            self.chess.move(1, 0, 1, 0)  # Movimiento inválido (a la misma posición)
-        self.assertEqual(self.chess.turn, "WHITE", "El turno no debería cambiar después de un movimiento inválido.")
+        self.chess.realizar_movimiento(6, 0, 4, 0)  # Mueve el peón blanco
+        initial_turn = self.chess.turn
+        with self.assertRaises(InvalidPieceMoveError):
+            self.chess.realizar_movimiento(7, 1, 5, 3)  # Movimiento inválido de caballo
+        self.assertEqual(self.chess.turn, initial_turn, "El turno no debería cambiar después de un movimiento inválido.")
+
+    def test_moving_to_occupied_position(self):
+        """
+        Verifica que se lance una excepción al intentar mover a una posición ocupada por una pieza enemiga.
+        """
+        self.chess.realizar_movimiento(6, 0, 4, 0)  # Mueve el peón blanco
+        self.chess.realizar_movimiento(1, 0, 3, 0)  # Mueve el peón negro
+        with self.assertRaises(InvalidPieceMoveError) as context:
+            self.chess.realizar_movimiento(4, 0, 3, 0)  # Intenta mover a la posición ocupada por el peón negro
+        self.assertEqual(str(context.exception), "You cannot capture your own piece.")
+
+    def test_moving_knight_to_invalid_position(self):
+        """
+        Verifica que un caballo no pueda moverse a una posición inválida.
+        """
+        self.chess.realizar_movimiento(7, 1, 5, 2)  # Mueve el caballo de (7, 1) a (5, 2)
+        with self.assertRaises(InvalidPieceMoveError) as context:
+            self.chess.realizar_movimiento(5, 2, 4, 4)  # Movimiento inválido de caballo
+        self.assertEqual(str(context.exception), "Invalid move for the selected piece.")
 
 if __name__ == '__main__':
     unittest.main()

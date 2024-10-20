@@ -1,85 +1,87 @@
 import unittest
+from unittest.mock import patch, MagicMock
+from io import StringIO
 from chess import Chess
-from cli import play 
-from unittest.mock import patch
+from cli import play, render_board_with_icons
+from exceptions import InvalidPieceMoveError, GameOverException
 
-class TestCli(unittest.TestCase):
-    
-    @patch('cli.input', side_effect=['0', '1', '2', '3', 'yes'])  # Ajusta según lo que necesitas
-    @patch('cli.print')  # Simula la función print
-    @patch('chess.Chess.move')  # Simula el método 'move' de Chess
-    
-    def test_happy_path(self, mock_chess_move, mock_print, mock_input):
-    # Inicializar el objeto Chess
-        chess = Chess()
+class TestChessCLI(unittest.TestCase):
 
-    # Ejecutar la función de jugar con los mocks de inputs
+    @patch('sys.stdout', new_callable=StringIO)
+    def test_render_board_with_icons(self, mock_stdout):
+        board = [
+            ['R', 'N', 'B', 'Q', 'K', 'B', 'N', 'R'],
+            ['P', 'P', 'P', 'P', 'P', 'P', 'P', 'P'],
+            ['.', '.', '.', '.', '.', '.', '.', '.'],
+            ['.', '.', '.', '.', '.', '.', '.', '.'],
+            ['.', '.', '.', '.', '.', '.', '.', '.'],
+            ['.', '.', '.', '.', '.', '.', '.', '.'],
+            ['p', 'p', 'p', 'p', 'p', 'p', 'p', 'p'],
+            ['r', 'n', 'b', 'q', 'k', 'b', 'n', 'r']
+        ]
+        render_board_with_icons(board)
+        expected_output = (
+            '♜ ♞ ♝ ♛ ♚ ♝ ♞ ♜\n'
+            '♟ ♟ ♟ ♟ ♟ ♟ ♟ ♟\n'
+            '· · · · · · · ·\n'
+            '· · · · · · · ·\n'
+            '· · · · · · · ·\n'
+            '· · · · · · · ·\n'
+            '♙ ♙ ♙ ♙ ♙ ♙ ♙ ♙\n'
+            '♖ ♘ ♗ ♕ ♔ ♗ ♘ ♖\n'
+        )
+        self.assertEqual(mock_stdout.getvalue(), expected_output)
+
+    @patch('builtins.input', side_effect=['0', '0', '7', '7'])
+    @patch('sys.stdout', new_callable=StringIO)
+    def test_valid_move(self, mock_stdout, mock_input):
+        chess = MagicMock(spec=Chess)
+        chess.get_board.return_value = [['.'] * 8 for _ in range(8)]
+        chess.turno = 'WHITE'
         play(chess)
+        
+        chess.realizar_movimiento.assert_called_with(0, 0, 7, 7)
+        self.assertIn("Movimiento realizado", mock_stdout.getvalue())
 
-    # Verificar que se llamaron los mocks como se esperaba
-        mock_input.assert_called()  # Verificar que se llamó la función input
-        mock_print.assert_called()  # Verificar que se llamó la función print
-        mock_chess_move.assert_called()  # Verificar que se llamó el método move
+    @patch('builtins.input', side_effect=['EXIT'])
+    @patch('sys.stdout', new_callable=StringIO)
+    def test_exit_game(self, mock_stdout, mock_input):
+        chess = MagicMock(spec=Chess)
+        with self.assertRaises(SystemExit):
+            play(chess)
+        self.assertIn("Juego terminado.", mock_stdout.getvalue())
 
-    # Ajusta el número de veces que se llama a input
-        self.assertEqual(mock_input.call_count, 5)  # Cambiar a 5 si es el número correcto
-        self.assertEqual(mock_print.call_count, 2)
-
-
-    @patch('builtins.input', side_effect=['hola', '1', '2', '2'])  # Primer input inválido
-    @patch('builtins.print')  
-    @patch.object(Chess, 'move')
-    def test_invalid_first_input(self, mock_chess_move, mock_print, mock_input):
-        """
-        Verifica que un input no válido (como 'hola') se maneje correctamente.
-        """
-        chess = Chess()
+    @patch('builtins.input', side_effect=['0', '0', '1', '1'])
+    @patch('sys.stdout', new_callable=StringIO)
+    def test_invalid_move(self, mock_stdout, mock_input):
+        chess = MagicMock(spec=Chess)
+        chess.realizar_movimiento.side_effect = InvalidPieceMoveError("Invalid move")
+        
         play(chess)
         
-        # Verifica que solo se haya procesado el primer input (inválido)
-        self.assertEqual(mock_input.call_count, 1)
-        
-        # Verifica que el mensaje de error y las instrucciones adicionales se impriman correctamente
-        self.assertEqual(mock_print.call_count, 1)
-        
-        # No debe haberse llamado `move` porque el input fue inválido
-        self.assertEqual(mock_chess_move.call_count, 0)
+        self.assertIn("Movimiento inválido: Invalid move", mock_stdout.getvalue())
 
-    @patch('builtins.input', side_effect=['1', '1', '2', 'hola'])  # Input inválido al final
-    @patch('builtins.print')  
-    @patch.object(Chess, 'move')
-    def test_invalid_second_input(self, mock_chess_move, mock_print, mock_input):
-        """
-        Verifica que un input no válido en la segunda coordenada se maneje correctamente.
-        """
-        chess = Chess()
+    @patch('builtins.input', side_effect=['1', 'a', 'EXIT'])
+    @patch('sys.stdout', new_callable=StringIO)
+    def test_non_numeric_input(self, mock_stdout, mock_input):
+        chess = MagicMock(spec=Chess)
         play(chess)
-
-        # Se procesan los 4 inputs (2 válidos, 2 inválidos)
-        self.assertEqual(mock_input.call_count, 4)
         
-        # Debe haber 3 mensajes impresos (instrucciones + error)
-        self.assertEqual(mock_print.call_count, 1)
+        self.assertIn("Entrada inválida. Por favor ingresa un número entre 0 y 7.", mock_stdout.getvalue())
 
-        # No debe haberse ejecutado el movimiento por el input inválido
-        self.assertEqual(mock_chess_move.call_count, 0)
-
-    @patch('builtins.print')  
-    def test_check_output(self, mock_print):
-        """
-        Verifica que los mensajes impresos sean correctos.
-        """
-        # Simula una llamada a print
-        print("Expected message")
+    @patch('builtins.input', side_effect=['0', '1', '2', '3', 'EXIT'])
+    @patch('sys.stdout', new_callable=StringIO)
+    @patch('builtins.exit', side_effect=SystemExit)  
+    def test_valid_move_then_exit(self, mock_stdout, mock_input, mock_exit):
+        chess = MagicMock(spec=Chess)
+        chess.get_board.return_value = [['.'] * 8 for _ in range(8)]
+        chess.turno = 'WHITE'
+        play(chess)
         
-        # Verifica que el mensaje esperado fue impreso
-        mock_print.assert_called_with("Expected message")
-
-        # Verifica que se llamó a print exactamente una vez
-        self.assertEqual(mock_print.call_count, 1)
-
-        # Opcional: puedes verificar el historial de llamadas a print
-        print(mock_print.call_args_list)
+        chess.realizar_movimiento.assert_called_with(0, 1, 2, 3)
+        
+        # Llamada a exit después del movimiento
+        self.assertIn("Juego terminado.", mock_stdout.getvalue())
 
 if __name__ == '__main__':
     unittest.main()
