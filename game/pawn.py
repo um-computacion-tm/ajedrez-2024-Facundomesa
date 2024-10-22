@@ -1,19 +1,13 @@
-class Pawn:
-    VALID_COLORS = {"WHITE", "BLACK"}
+from game.piece import Piece
 
-    def __init__(self, color, board=None):
-        if color.upper() not in Pawn.VALID_COLORS:
-            raise ValueError(f"Color inválido: {color}")
-        self.color = color.upper()
-        self.board = board  # El tablero se guarda si se proporciona
-
+class Pawn(Piece):
     def __repr__(self):
         return f"Pawn({self.color})"
 
     def __str__(self):
         return "♙" if self.color == "WHITE" else "♟"
 
-    def get_valid_moves(self, position, board):
+    def possible_moves(self, position, board):
         row, col = position
         moves = []
 

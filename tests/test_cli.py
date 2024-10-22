@@ -1,9 +1,9 @@
 import unittest
 from unittest.mock import patch, MagicMock
 from io import StringIO
-from chess import Chess
-from cli import play, render_board_with_icons
-from exceptions import InvalidPieceMoveError, GameOverException
+from game.chess import Chess
+from game.cli import play, render_board_with_icons
+from game.exceptions import InvalidPieceMoveError, GameOverException
 
 class TestChessCLI(unittest.TestCase):
 
@@ -76,12 +76,18 @@ class TestChessCLI(unittest.TestCase):
         chess = MagicMock(spec=Chess)
         chess.get_board.return_value = [['.'] * 8 for _ in range(8)]
         chess.turno = 'WHITE'
+    
+    # Definir manualmente el método 'realizar_movimiento' en el Mock
+        chess.realizar_movimiento = MagicMock()
+
         play(chess)
-        
+    
+    # Verificar que 'realizar_movimiento' se haya llamado con las coordenadas correctas
         chess.realizar_movimiento.assert_called_with(0, 1, 2, 3)
-        
-        # Llamada a exit después del movimiento
+    
+    # Verificar que se haya mostrado el mensaje de finalización del juego
         self.assertIn("Juego terminado.", mock_stdout.getvalue())
+
 
 if __name__ == '__main__':
     unittest.main()

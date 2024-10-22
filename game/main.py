@@ -1,5 +1,5 @@
-from chess import Chess
-from cli import play
+from game.chess import Chess
+from game.cli import play
 
 def main():
     ajedrez = Chess()  # Crear la instancia del juego

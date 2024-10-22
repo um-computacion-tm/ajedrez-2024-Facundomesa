@@ -1,5 +1,5 @@
-from board import Board
-from .exceptions import NonPieceOriginError, WrongTurnError, InvalidPieceMoveError, GameOverException
+from game.board import Board
+from game.exceptions import NonPieceOriginError, WrongTurnError, InvalidPieceMoveError, GameOverException
 
 class Chess:
     def __init__(self):
@@ -14,6 +14,10 @@ class Chess:
         Devuelve el estado actual del tablero.
         """
         return self._board.get_board_state()
+    
+    @property
+    def turno(self):
+        return self._current_turn
 
     def move(self, start_row, start_col, end_row, end_col):
         """
@@ -29,8 +33,8 @@ class Chess:
             raise NonPieceOriginError("No hay una pieza en la posición inicial")
 
         # Verifica si la pieza es del color correcto según el turno
-        if piece.get_color() != self._current_turn:
-            raise WrongTurnError(f"No es el turno de {self._current_turn}")
+        if piece.color != self._current_turn:
+            raise WrongTurnError()
 
         # Verifica si la posición de destino está ocupada por una pieza del mismo color
         destination_piece = self._board.get_piece(end_row, end_col)
@@ -46,7 +50,7 @@ class Chess:
 
         # Cambia el turno después de mover
         self._change_turn()
-
+        
     def _change_turn(self):
         """
         Cambia el turno entre 'WHITE' y 'BLACK'.

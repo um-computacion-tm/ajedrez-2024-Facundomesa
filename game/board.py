@@ -1,48 +1,46 @@
-from exceptions import GameOverException, NonCaptureOwnPieceError, NonPassOverPieceError, NonCaptureForwardError, NonPieceOriginError
+from game.exceptions import GameOverException, NonCaptureOwnPieceError, NonPassOverPieceError, NonCaptureForwardError, NonPieceOriginError
+from game.rook import Rook
+from game.pawn import Pawn
+from game.king import King
+from game.queen import Queen
+from game.bishop import Bishop
+from game.knight import Knight
 
 class Board:
     def __init__(self, forTest=False):
         # Inicializa el tablero con piezas en sus posiciones iniciales o vacío para pruebas
         self.board = [[None] * 8 for _ in range(8)]
-        if not forTest:
-            self._iniciar_posiciones_iniciales()
+        self._iniciar_posiciones_iniciales()
+        # if not forTest:
 
     def _iniciar_posiciones_iniciales(self):
-        # Importación diferida de las piezas para evitar dependencia circular
-        from rook import Rook
-        from pawn import Pawn
-        from king import King
-        from queen import Queen
-        from bishop import Bishop
-        from knight import Knight
-
         # Coloca las piezas en sus posiciones iniciales
-        self.board[0][0] = Rook("BLACK")
-        self.board[0][7] = Rook("BLACK")
-        self.board[7][0] = Rook("WHITE")
-        self.board[7][7] = Rook("WHITE")
+        self.board[0][0] = Rook("BLACK", self)
+        self.board[0][7] = Rook("BLACK", self)
+        self.board[7][0] = Rook("WHITE", self)
+        self.board[7][7] = Rook("WHITE", self)
 
         # Colocar peones
         for i in range(8):
-            self.board[1][i] = Pawn("BLACK")
-            self.board[6][i] = Pawn("WHITE")
+            self.board[1][i] = Pawn("BLACK", self)
+            self.board[6][i] = Pawn("WHITE", self)
 
         # Colocar caballos, alfiles, reinas y reyes
-        self.board[0][1] = Knight("BLACK")
-        self.board[0][6] = Knight("BLACK")
-        self.board[7][1] = Knight("WHITE")
-        self.board[7][6] = Knight("WHITE")
+        self.board[0][1] = Knight("BLACK", self)
+        self.board[0][6] = Knight("BLACK", self)
+        self.board[7][1] = Knight("WHITE", self)
+        self.board[7][6] = Knight("WHITE", self)
 
-        self.board[0][2] = Bishop("BLACK")
-        self.board[0][5] = Bishop("BLACK")
-        self.board[7][2] = Bishop("WHITE")
-        self.board[7][5] = Bishop("WHITE")
+        self.board[0][2] = Bishop("BLACK", self)
+        self.board[0][5] = Bishop("BLACK", self)
+        self.board[7][2] = Bishop("WHITE", self)
+        self.board[7][5] = Bishop("WHITE", self)
 
-        self.board[0][3] = Queen("BLACK")
-        self.board[7][3] = Queen("WHITE")
+        self.board[0][3] = Queen("BLACK", self)
+        self.board[7][3] = Queen("WHITE", self)
 
-        self.board[0][4] = King("BLACK")
-        self.board[7][4] = King("WHITE")
+        self.board[0][4] = King("BLACK", self)
+        self.board[7][4] = King("WHITE", self)
 
     def get_piece(self, row, col):
         # Obtiene la pieza en la posición especificada
@@ -89,8 +87,8 @@ class Board:
         piece = self.get_piece(from_row, from_col)
         if not piece:
             return False
-        posibles_movimientos = piece.possible_moves(from_row, from_col)
-        return (to_row, to_col) in posibles_movimientos
+        possible_moves= piece.possible_moves((from_row, from_col), self)
+        return (to_row, to_col) in possible_moves
 
     def _es_movimiento_valido_peon(self, from_row, from_col, to_row, to_col, target_piece):
         # Valida las reglas para el movimiento de un peón
@@ -119,9 +117,18 @@ class Board:
             raise GameOverException("Black wins")
 
     def get_board_state(self):
-        # Devuelve una representación del estado del tablero
-        board_repr = []
-        for row in self.board:
-            row_repr = [str(piece) if piece else '.' for piece in row]
-            board_repr.append(row_repr)
-        return board_repr
+        # Encabezado de columnas
+        header = "   "  # Espacio inicial para la alineación
+        header += " ".join([f"{i:^5}" for i in range(8)])  # Centrando los números
+        board_str = header + "\n"
+
+        for row_idx, row in enumerate(self.board):
+            row_str = f"{row_idx} "  # Número de fila
+            for cell in row:
+                if cell is None:
+                    row_str += "[   ] "  # Espacio para las celdas vacías
+                else:
+                    row_str += f"[{str(cell):^3}] "  # Centrar símbolo de pieza
+            board_str += row_str + "\n"
+
+        return board_str

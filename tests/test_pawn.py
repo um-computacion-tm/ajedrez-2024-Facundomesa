@@ -1,6 +1,6 @@
 import unittest
-from pawn import Pawn
-from board import Board
+from game.pawn import Pawn
+from game.board import Board
 #import ipdb
 
 class TestPawn(unittest.TestCase):

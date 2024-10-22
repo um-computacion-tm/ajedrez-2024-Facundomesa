@@ -1,5 +1,5 @@
 import unittest
-from king import King
+from game.king import King
 
 class King:
     def __init__(self, color):

@@ -1,4 +1,3 @@
-# Exceptions
 class InvalidMove(Exception):
     message = "Invalid piece movement"
     def __str__(self):

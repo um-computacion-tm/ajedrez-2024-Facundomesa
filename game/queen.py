@@ -1,11 +1,7 @@
-class Queen:
-    def __init__(self, color):
-        self.color = color
+from game.piece import Piece
 
-    def __str__(self):
-        return f"{self.color} Queen"
-
-    def get_valid_moves(self, position, board):
+class Queen(Piece):
+    def possible_moves(self, position, board):
         """
         Calcula los movimientos válidos para la reina desde la posición actual.
         La reina puede moverse en líneas rectas o diagonales.
@@ -35,4 +31,4 @@ class Queen:
         return valid_moves
 
     def __str__(self):
-        return f"{self.color} Queen"
+        return "♕" if self.color == "WHITE" else "♛"

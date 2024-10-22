@@ -1,5 +1,5 @@
 import unittest
-from bishop import Bishop
+from game.bishop import Bishop
 
 class TestBishop(unittest.TestCase):
     def test_Bishop_initialization(self):

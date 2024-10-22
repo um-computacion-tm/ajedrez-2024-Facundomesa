@@ -1,5 +1,5 @@
 import unittest
-from knight import Knight
+from game.knight import Knight
 
 class TestKnight(unittest.TestCase):
     def setUp(self):

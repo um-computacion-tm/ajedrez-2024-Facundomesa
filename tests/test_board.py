@@ -1,6 +1,8 @@
 import unittest
-from board import Board
-from exceptions import NonCaptureOwnPieceError, NonPassOverPieceError, GameOverException
+from game.board import Board
+from game.exceptions import NonCaptureOwnPieceError, NonPassOverPieceError, GameOverException
+from game.pawn import Pawn
+from game.rook import Rook
 
 class TestTablero(unittest.TestCase):
     # Verifica el comportamiento del método is_valid_move de la clase Board cuando no hay una pieza en la posición de origen  

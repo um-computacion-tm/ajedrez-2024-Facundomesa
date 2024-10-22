@@ -1,15 +1,10 @@
-class Bishop:
-    def use_rook(self):
-        from rook import Rook  
-        rook = Rook()
-        
-    def __init__(self, color):
-        self.color = color
+from game.piece import Piece
 
+class Bishop(Piece):
     def __str__(self):
-        return f"{self.color} Bishop"
+        return "♗" if self.color == "WHITE" else "♝"
 
-    def get_valid_moves(self, position, board):
+    def possible_moves(self, position, board):
         row, col = position
         moves = []
         directions = [
@@ -22,7 +17,7 @@ class Bishop:
         for direction in directions:
             r, c = row + direction[0], col + direction[1]
             while 0 <= r < 8 and 0 <= c < 8:
-                piece = board[r][c]
+                piece = board.board[r][c]
                 if piece is None:
                     moves.append((r, c))
                 elif piece.color != self.color:

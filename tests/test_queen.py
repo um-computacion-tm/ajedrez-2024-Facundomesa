@@ -1,6 +1,6 @@
 import unittest
-from queen import Queen 
-from board import Board
+from game.queen import Queen 
+from game.board import Board
 
 class TestQueen(unittest.TestCase):
 

@@ -1,4 +1,3 @@
-
 class Piece:
     def __init__(self, color, board):
         if color not in ["WHITE", "BLACK"]:
@@ -31,7 +30,6 @@ class Piece:
 
     def movements(self, row, col, board):
         raise NotImplementedError("Este método debe ser implementado por subclases concretas.")
-
-class MockPiece(Piece):
-    def movements(self, row, col, board):
-        return []
+    
+    def get_color(self):
+        return self.color

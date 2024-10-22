@@ -1,5 +1,5 @@
 import unittest
-from piece import Piece,MockPiece
+from game.piece import Piece,MockPiece
 
 class MockPiece(Piece):
     """Una subclase de Piece para propósitos de testeo, ya que Piece es abstracta."""

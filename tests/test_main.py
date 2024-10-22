@@ -1,6 +1,6 @@
 import unittest
 from unittest.mock import patch
-from main import main  # Asegúrate de que el nombre del archivo sea correcto
+from game.main import main  # Asegúrate de que el nombre del archivo sea correcto
 
 class TestMainFunction(unittest.TestCase):
     @patch('main.play')  # Simula la función play

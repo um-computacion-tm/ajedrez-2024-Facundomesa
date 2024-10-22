@@ -1,20 +1,7 @@
-from board import Board
+from game.piece import Piece
 
-class Rook:
-    VALID_COLORS = {"WHITE", "BLACK"}
-
-    def __init__(self, color, board:Board = None):
-        if color.upper() not in Rook.VALID_COLORS:
-            raise ValueError(f"Color inválido: {color}")
-        self.color = color.upper()
-        self.board = board
-
-    def valid_moves(self, position, board=None):
-        if board is None:
-            board = self.board  # Si no se pasa un board, usa el de la instancia
-        if board is None:
-            raise ValueError("Se requiere un tablero (board) para calcular los movimientos.")
-        
+class Rook(Piece):
+    def possible_moves(self, position, board=None):
         row, col = position
 
         # Verificar si la posición está fuera del tablero
@@ -25,9 +12,9 @@ class Rook:
 
         # Movimiento hacia arriba (misma columna, filas decreciendo)
         for r in range(row - 1, -1, -1):
-            if board[r][col] is None:
+            if board.board[r][col] is None:
                 valid_moves.append((r, col))
-            elif board[r][col].color != self.color:
+            elif board.board[r][col].color != self.color:
                 valid_moves.append((r, col))  # Captura de una pieza del oponente
                 break
             else:
@@ -35,9 +22,9 @@ class Rook:
 
         # Movimiento hacia abajo (misma columna, filas aumentando)
         for r in range(row + 1, 8):
-            if board[r][col] is None:
+            if board.board[r][col] is None:
                 valid_moves.append((r, col))
-            elif board[r][col].color != self.color:
+            elif board.board[r][col].color != self.color:
                 valid_moves.append((r, col))  # Captura de una pieza del oponente
                 break
             else:
@@ -45,9 +32,9 @@ class Rook:
 
         # Movimiento hacia la izquierda (misma fila, columnas decreciendo)
         for c in range(col - 1, -1, -1):
-            if board[row][c] is None:
+            if board.board[row][c] is None:
                 valid_moves.append((row, c))
-            elif board[row][c].color != self.color:
+            elif board.board[row][c].color != self.color:
                 valid_moves.append((row, c))  # Captura de una pieza del oponente
                 break
             else:
@@ -55,9 +42,9 @@ class Rook:
 
         # Movimiento hacia la derecha (mismapytp fila, columnas aumentando)
         for c in range(col + 1, 8):
-            if board[row][c] is None:
+            if board.board[row][c] is None:
                 valid_moves.append((row, c))
-            elif board[row][c].color != self.color:
+            elif board.board[row][c].color != self.color:
                 valid_moves.append((row, c))  # Captura de una pieza del oponente
                 break
             else:

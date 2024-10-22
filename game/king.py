@@ -1,14 +1,10 @@
-class King:
-    def some_method(self):
-        from board import Board 
-        
-    def __init__(self, color):
-        self.color = color
+from game.piece import Piece
 
+class King(Piece):
     def __str__(self):
-        return f"{self.color} King"
-
-    def get_valid_moves(self, position, board):
+        return "♔" if self.color == "WHITE" else "♚"
+    
+    def possible_moves(self, position, board):
         row, col = position
         moves = []
         directions = [
@@ -20,7 +16,7 @@ class King:
         for direction in directions:
             r, c = row + direction[0], col + direction[1]
             if 0 <= r < 8 and 0 <= c < 8:
-                piece = board[r][c]
+                piece = board.board[r][c]
                 if piece is None or piece.color != self.color:
                     moves.append((r, c))
 

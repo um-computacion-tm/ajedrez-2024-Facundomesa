@@ -1,6 +1,6 @@
 import unittest
-from chess import Chess
-from exceptions import NonPieceOriginError, WrongTurnError, InvalidPieceMoveError
+from game.chess import Chess
+from game.exceptions import NonPieceOriginError, WrongTurnError, InvalidPieceMoveError
 
 class TestChess(unittest.TestCase):
 
