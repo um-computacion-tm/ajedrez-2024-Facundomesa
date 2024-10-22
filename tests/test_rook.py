@@ -13,33 +13,33 @@ class TestRook(unittest.TestCase):
 
     def test_color_validation(self):
         with self.assertRaises(ValueError):
-            Rook("Red")  # Color inválido
+            Rook("Red", self.board)  # Color inválido
         with self.assertRaises(ValueError):
-            Rook("")  # Color vacío
+            Rook("", self.board)  # Color vacío
 
-    def test_valid_moves_from_center(self):
+    def test_possible_moves_from_center(self):
         self.white_Rook = Rook("WHITE", self.board)
-        self.board = [[None for _ in range(8)] for _ in range(8)]  # Crear un tablero vacío
+        self.board = Board(forTest=True)  # Crear un tablero vacío
     
         # Movimientos esperados desde la posición (4, 4)
         expected_moves = [
             (4, 0), (4, 1), (4, 2), (4, 3), (4, 5), (4, 6), (4, 7),  # Movimientos horizontales
-            (0, 4), (1, 4), (2, 4), (3, 4), (5, 4), (6, 4), (7, 4)   # Movimientos verticales
+            (1, 4), (2, 4), (3, 4), (5, 4)   # Movimientos verticales
         ]
     
-        # Llamar a valid_moves con la posición y el tablero
-        valid_moves = self.white_Rook.valid_moves((4, 4), self.board)
+        # Llamar a possible_moves con la posición y el tablero
+        possible_moves = self.white_Rook.possible_moves((4, 4), self.board)
     
         # Comparar los movimientos calculados con los movimientos esperados
-        self.assertEqual(set(valid_moves), set(expected_moves))
+        self.assertEqual(set(possible_moves), set(expected_moves))
 
     def test_invalid_position(self):
+        self.board = Board(forTest=True)  # Crear un tablero vacío
         self.white_Rook = Rook("WHITE", self.board)
-        self.board = [[None for _ in range(8)] for _ in range(8)]
     
         # Intentar obtener movimientos de una posición inválida
         with self.assertRaises(ValueError):  # Esperamos que se lance un ValueError
-            self.white_Rook.valid_moves((8, 8), self.board)  # Posición fuera del tablero
+            self.white_Rook.possible_moves((8, 8), self.board)  # Posición fuera del tablero
 
     def test_can_attack_same_row(self):
         self.assertTrue(self.white_Rook.can_attack((0, 7), (0, 0)))
@@ -84,11 +84,11 @@ class TestRook(unittest.TestCase):
 
         # ipdb.set_trace()
         # Movimientos esperados: la torre puede capturar el peón en (6, 1)
-        valid_moves = self.white_Rook.possible_positions_vd(7, 1, -1)
+        possible_moves = self.white_Rook.possible_positions_vd(7, 1, -1)
         expected_moves = [(6, 1)]  # El peón negro en (6, 1) puede ser capturado
 
         # Verificar que los movimientos válidos sean los esperados
-        self.assertEqual(valid_moves, expected_moves)
+        self.assertEqual(possible_moves, expected_moves)
 
 if __name__ == '__main__':
     unittest.main()

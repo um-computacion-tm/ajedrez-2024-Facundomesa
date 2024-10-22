@@ -6,6 +6,10 @@ class Piece:
         self.board = board
 
     def is_move_valid(self, row, col, board):
+        """
+        Input: Position and board
+        Output: List of possible moves
+        """
         if not (0 <= row < 8 and 0 <= col < 8):
             return False
         

@@ -34,7 +34,7 @@ def play(chess_game):
             origen_fila, origen_columna, destino_fila, destino_columna = map(int, [origen_fila, origen_columna, destino_fila, destino_columna])
 
             # Ejecutar el movimiento de la pieza
-            chess.move(origen_fila, origen_columna, destino_fila, destino_columna)
+            chess_game.move(origen_fila, origen_columna, destino_fila, destino_columna)
 
         except (ValueError, InvalidMove, OutOfBoundsError, NonNumericInputError, InvalidPieceMoveError) as error:
             print(f"Movimiento inválido: {error}")
@@ -66,9 +66,6 @@ def obtener_input(prompt):
             return valor
         print("Entrada inválida. Por favor ingresa un número entre 0 y 7.")
 
-import ipdb
 # Punto de entrada del programa
 if __name__ == "__main__":
-    chess = Chess()
-    # ipdb.set_trace()
-    play(chess)  # Llamar a la función para iniciar el juego
+    start_game()

@@ -6,6 +6,7 @@ omit =
     entorno/*
     */test*
     */__init__.py
+    main.py
 [report]
 exclude_lines =
     pragma: no cover
