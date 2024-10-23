@@ -84,27 +84,3 @@ class Rook(Piece):
                 break
             possibles.append((r, col))  # Casilla vacía
         return possibles
-
-    def possible_positions_hr(self, row, col):
-        """ Movimientos horizontales a la derecha (col++) """
-        possibles = []
-        for c in range(col + 1, 8):
-            piece = self.board.get_piece(row, c)
-            if piece:
-                if piece.color != self.color:
-                    possibles.append((row, c))  # Puede capturar pieza enemiga
-                break
-            possibles.append((row, c))  # Casilla vacía
-        return possibles
-
-    def possible_positions_hl(self, row, col):
-        """ Movimientos horizontales a la izquierda (col--) """
-        possibles = []
-        for c in range(col - 1, -1, -1):
-            piece = self.board.get_piece(row, c)
-            if piece:
-                if piece.color != self.color:
-                    possibles.append((row, c))  # Puede capturar pieza enemiga
-                break
-            possibles.append((row, c))  # Casilla vacía
-        return possibles

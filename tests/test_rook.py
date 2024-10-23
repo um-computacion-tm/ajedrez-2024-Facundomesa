@@ -2,6 +2,7 @@ import unittest
 from game.rook import Rook
 from game.board import Board
 from game.pawn import Pawn
+from unittest.mock import MagicMock
 
 #import ipdb
 
@@ -89,6 +90,6 @@ class TestRook(unittest.TestCase):
 
         # Verificar que los movimientos válidos sean los esperados
         self.assertEqual(possible_moves, expected_moves)
-
+        
 if __name__ == '__main__':
     unittest.main()

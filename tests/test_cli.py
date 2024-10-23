@@ -67,6 +67,19 @@ def test_valid_move_then_exit(self, mock_stdout, mock_input, mock_exit):
     # Verificar que se haya mostrado el mensaje de finalización del juego
     self.assertIn("Juego terminado.", mock_stdout.getvalue())
 
+    @patch('builtins.input', side_effect=['EXIT'])  # Simular el input para terminar el juego
+    @patch('sys.stdout', new_callable=StringIO)  # Capturar la salida estándar
+    def test_start_game_gameover(self, mock_stdout, mock_input):
+        # Simular un juego de ajedrez
+        Chess = MagicMock(spec=Chess)
+
+        # Simular que ocurre un GameOverException durante el juego
+        with patch('cli.play', side_effect=GameOverException("Checkmate!")):
+            start_game()
+
+        # Verificar que el mensaje de finalización del juego se haya impreso
+        self.assertIn("Checkmate!", mock_stdout.getvalue())
+        self.assertIn("Juego terminado.", mock_stdout.getvalue())
 
 if __name__ == '__main__':
     unittest.main()
